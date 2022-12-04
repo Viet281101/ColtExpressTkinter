@@ -37,6 +37,7 @@ class Window(tk.Tk):
 class MenuStartWindow(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
+        stopCreditMusic()
         self.background()
         self.buttonGame(master)
 
@@ -46,7 +47,7 @@ class MenuStartWindow(tk.Frame):
         self.lbl['cursor'] = 'X_cursor'
         self.lbl.grid(row = 0, column = 0)
         self.lbl.load('./assets/Images/pixel_train_city.gif')
-        if unmute: playMusic()
+        if unmute: trainSound()
     
     def buttonGame(self, master) -> None:
         frameBtn = tk.Frame(self,width = 170, height = 576, bg=TEXT_PURPLE)
@@ -153,7 +154,7 @@ class ImageLabel(tk.Label):
 class Game(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        stopMusic()
+        stopTrainSound()
 
         ''' Start to build the game in here '''
         ##### Set canvas 
@@ -190,7 +191,7 @@ class Game(tk.Frame):
 class Rule(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        stopMusic()
+        stopTrainSound()
 
         ##### Set canvas 
         self.tkraise()
@@ -221,7 +222,8 @@ class Rule(tk.Frame):
 class Credit(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        stopMusic()
+        stopTrainSound()
+        if unmute : creditMusic()
 
         ##### Set canvas 
         self.tkraise()
@@ -298,12 +300,13 @@ class Credit(tk.Frame):
     def canvasMove(self, index:int = 0) -> None:
         self.textCreditCV.move(self.creditTxt, self.x, self.y)
         index += self.scroll
-        if index == 940 and self.nbrScroll > 0: 
+        if index == 940 and self.nbrScroll > 0:
             self.y = 0; self.arrowUpBtn.place(x = 0, y = 60)
             self.scroll = 0; self.nbrScroll -= 1
         if index == 0: 
             self.y = 0; self.arrowDownBtn.place(x = 0, y = 60)
             self.scroll = 0; self.nbrScroll -= 1
+        if index > 950: self.y = 0; self.scroll = 0 
         self.textCreditCV.after(self.speedText, self.canvasMove, index)
     
     def scrollUp(self) -> None:
@@ -317,7 +320,7 @@ class Credit(tk.Frame):
 class Setting(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        stopMusic()
+        stopTrainSound()
 
         ###### Title page
         self.title = tk.Label(self, text="", fg = 'purple', 
@@ -537,11 +540,16 @@ class TrainCarriage():
 
 
 ## Sounds
-def playMusic() -> None:
-    start_music.play(-1)
-    start_music.set_volume(volume_sound)
-def stopMusic() -> None:
-    start_music.stop()
+def trainSound() -> None:
+    train_sound.play(-1)
+    train_sound.set_volume(volume_sound)
+def stopTrainSound() -> None:
+    train_sound.stop()
+def creditMusic() -> None:
+    credit_music.play(-1)
+    credit_music.set_volume(volume_sound / 2.0)
+def stopCreditMusic() -> None:
+    credit_music.stop()
 def clickSound() -> None:
     click_sound.play(1)
     click_sound.set_volume(0.2)
@@ -570,7 +578,8 @@ if __name__ == '__main__':
 
     #### Load sounds
     pygame.mixer.init()
-    start_music = pygame.mixer.Sound("./assets/Sound/start_train_sound.wav")
+    train_sound = pygame.mixer.Sound("./assets/Sound/start_train_sound.wav")
+    credit_music = pygame.mixer.Sound("./assets/Sound/credit_music.wav")
     click_sound = pygame.mixer.Sound("./assets/Sound/click_01.wav")
 
     #### set lang

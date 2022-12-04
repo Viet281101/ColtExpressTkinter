@@ -10,7 +10,10 @@
 - [test train image](http://pixelartmaker.com/art/e3f9d867cfc9216)
 
 
-- [train sound](https://mixkit.co/free-sound-effects/train/)
+- [train sound](https://mixkit.co/free-sound-effects/train/) 
+
+
+- [credit music](https://opengameart.org/content/menu-music) from OpenGameArt.com
 
 
 - 'click sound' make by my own with this site: [rfxgen](https://raylibtech.itch.io/rfxgen)
