@@ -112,6 +112,7 @@ credits_text_eng = '''
 
             PROJECT IDEA:
                     by Oumaima El Joubari
+                    (professor)
 
 
 
@@ -185,6 +186,7 @@ credits_text_fr = '''
 
             IDÉE DE PROJET:
                     par Oumaima El Joubari
+                    (professeure)
 
 
 

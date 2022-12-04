@@ -244,14 +244,37 @@ class Credit(tk.Frame):
         ######### Print the Credit Text :
         self.x:int = 0
         self.y:int = -1
-        self.speedText:int = 30
+        self.speedText:int = 15
+        self.scroll:int = 1
+        self.nbrScroll:int = 2
         self.creditTxt = self.textCreditCV.create_text(0, 0, 
             anchor=NW, justify='center', 
             fill='purple', text=credits_text_eng, 
             font=FONT_HELV)
 
+
+        #### Scroll up button:
+        self.arrowUpImg = Image.open("./assets/Images/arrow_up.png")
+        self.arrowUpImg=ImageTk.PhotoImage(self.arrowUpImg)
+        self.arrowUpBtn = Button(self.canvas, image=self.arrowUpImg, 
+            command= self.scrollUp, 
+            bd = 0, bg = TEXT_PURPLE,
+            activebackground=TEXT_BLACK, cursor='target',
+            borderwidth=0, highlightthickness=0)
+        self.arrowUpBtn.image = self.arrowUpImg
+
+        #### Scroll down button:
+        self.arrowDownImg = rotate_img("./assets/Images/arrow_up.png", 180)
+        self.arrowDownImg.save("./assets/Images/arrow_down.png")
+        self.arrowDownImg=ImageTk.PhotoImage(self.arrowDownImg)
+        self.arrowDownBtn = Button(self.canvas, image=self.arrowDownImg, 
+            command= self.scrollDown, 
+            bd = 0, bg = TEXT_PURPLE,
+            activebackground=TEXT_BLACK, cursor='target',
+            borderwidth=0, highlightthickness=0)
+        self.arrowDownBtn.image = self.arrowDownImg
         
-        ### Return button
+        ### Return button:
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
             command=lambda: master.switch_frame(MenuStartWindow),
@@ -274,9 +297,21 @@ class Credit(tk.Frame):
 
     def canvasMove(self, index:int = 0) -> None:
         self.textCreditCV.move(self.creditTxt, self.x, self.y)
-        index+=1
-        if index == 890: self.y = 0
+        index += self.scroll
+        if index == 940 and self.nbrScroll > 0: 
+            self.y = 0; self.arrowUpBtn.place(x = 0, y = 60)
+            self.scroll = 0; self.nbrScroll -= 1
+        if index == 0: 
+            self.y = 0; self.arrowDownBtn.place(x = 0, y = 60)
+            self.scroll = 0; self.nbrScroll -= 1
         self.textCreditCV.after(self.speedText, self.canvasMove, index)
+    
+    def scrollUp(self) -> None:
+        self.arrowUpBtn.destroy()
+        self.y = 1; self.scroll = -1
+    def scrollDown(self) -> None:
+        self.arrowDownBtn.destroy()
+        self.y = -1; self.scroll = 1
 
 
 class Setting(tk.Frame):
@@ -447,13 +482,15 @@ class Setting(tk.Frame):
         if langEn and not langFr:
             messagebox.showinfo(
                 title='Language Notification',
-                message=f'You selected {self.langTxt.get()}!'
+                message=f"You selected {self.langTxt.get()}!\
+                    Press 'Apply' to load the language !"
             )
         
         elif not langEn and langFr:
             messagebox.showinfo(
                 title='Langue Notification',
-                message=f'Vous avez sélectionné {self.langTxt.get()}!'
+                message=f"Vous avez sélectionné {self.langTxt.get()}!\
+                    Appuyez sur 'Appliquer' pour charger la langue !"
             )
         
     def applyChange(self) -> None:
@@ -482,6 +519,23 @@ class Setting(tk.Frame):
         elif not unmute: print('mute\n')
 
 
+class TrainCarriage(): 
+    def __init__(self, canvas, x, y, photo):
+        self.canvas=canvas
+        self.x=x
+        self.y=y
+        self.photo = photo
+
+        self.trainImg()
+
+    def trainImg(self):
+        
+        self.i = Image.open(self.photo)
+        self.new=self.i.resize((650,300), Image.ANTIALIAS)
+        self.img= ImageTk.PhotoImage(self.new)
+        self.img_j= self.canvas.create_image(self.x, self.y, image = self.img)
+
+
 ## Sounds
 def playMusic() -> None:
     start_music.play(-1)
@@ -499,7 +553,10 @@ def startMenuGame() -> None:
     startMenu.bind('<Escape>', lambda event: startMenu.quit())
     startMenu.mainloop()
 
-    
+def rotate_img(img_path, rt_degr) -> None:
+    img = Image.open(img_path)
+    return img.rotate(rt_degr, expand=1)
+
 def main(args) -> None:
     startMenuGame()
 
