@@ -10,4 +10,11 @@
 - [test train image](http://pixelartmaker.com/art/e3f9d867cfc9216)
 
 
+- [train sound](https://mixkit.co/free-sound-effects/train/)
+
+
+- 'click sound' make by my own with this site: [rfxgen](https://raylibtech.itch.io/rfxgen)
+
+
+
 

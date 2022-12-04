@@ -56,9 +56,149 @@ francais_texte : dict = {
 
 
 ########## CREDIT TEXT ######################
-credits_text = '''
+credits_text_eng = '''
+---------------------- CREDIT ----------------------
+
+            
+            
+            
+            PROJECT SUPERVISOR:
+                    Viet Nguyen
+            
+
+            
+            
+            
+            
+            GAME PROJECT TESTER:
+                    Viet Nguyen
+            
+
+            
+            
+            
+            
+            SCRIPT PROGRAMMER:
+                    Viet Nguyen
 
 
+            
+
+
+            ANIMATION/GRAPHIC:
+                    by Viet Nguyen
+
+            with the sources from:
+                OpenGameArt.com
+                Pixelartmaker.com
+                LibreSprite
+                itch.io
+
+            
+
+
+            
+            MUSIC/SFX:
+                    by Viet Nguyen
+            
+            with the sources from:
+                Dictaphone
+                rfxgen
+
+
+
+            
+
+
+            PROJECT IDEA:
+                    by Oumaima El Joubari
+
+
+
+            
+
+            PRODUCER INFO:
+                    Name: Viet Nguyen
+                    Student number: 20006303
+                    Group/class : L2_A 
+
+
+
+
+---------------------- THANK YOU ----------------------
 '''
 
+
+credits_text_fr = '''
+---------------------- LE CRÉDIT ----------------------
+
+            
+            
+            
+            CHEF DE PROJET:
+                    Viet Nguyen
+            
+
+            
+            
+            
+            
+            TESTEUR DE PROJET DE JEU:
+                    Viet Nguyen
+            
+
+            
+            
+            
+            
+            PROGRAMMATEUR DE SCRIPTS:
+                    Viet Nguyen
+
+
+            
+
+
+            ANIMATIONS/GRAPHIQUES:
+                    par Viêt Nguyen
+
+            avec les sources de :
+                OpenGameArt.com
+                Pixelartmaker.com
+                LibreSprite
+                démangeaison.io
+
+            
+
+
+            
+            MUSIQUE/SFX:
+                    par Viêt Nguyen
+            
+            avec les sources de :
+                Dictaphone
+                rfxgen
+
+
+
+            
+
+
+            IDÉE DE PROJET:
+                    par Oumaima El Joubari
+
+
+
+            
+
+            INFORMATIONS SUR LE PRODUCTEUR:
+                    Nom : Viet Nguyen
+                    Numéro d'étudiant : 20006303
+                    Groupe/classe : L2_A
+
+
+
+
+---------------------- MERCI ----------------------
+
+'''
 

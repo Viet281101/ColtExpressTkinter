@@ -120,7 +120,7 @@ class ImageLabel(tk.Label):
     def load(self, im) -> None:
         if isinstance(im, str):
             im = Image.open(im)
-        frames = []
+        frames : list = []
 
         try:
             for i in count(1):
@@ -241,11 +241,17 @@ class Credit(tk.Frame):
         self.canvas.create_window(360, 0, anchor=NW, 
             window=self.textCreditCV)
         
-        self.creditTxt = tk.Text(self.textCreditCV, 
-            yscrollcommand=True, font = FONT_HELV,
-            bg = '#000000', bd = 0)
-        
+        ######### Print the Credit Text :
+        self.x:int = 0
+        self.y:int = -1
+        self.speedText:int = 30
+        self.creditTxt = self.textCreditCV.create_text(0, 0, 
+            anchor=NW, justify='center', 
+            fill='purple', text=credits_text_eng, 
+            font=FONT_HELV)
 
+        
+        ### Return button
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
             command=lambda: master.switch_frame(MenuStartWindow),
@@ -253,14 +259,24 @@ class Credit(tk.Frame):
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
 
+        self.canvasMove()
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
         if langEn and not langFr:
             self.returnBtn.config(text=english_text['return'])
+            self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_eng)
 
         elif not langEn and langFr:
             self.returnBtn.config(text=francais_texte['return'])
+            self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_fr)
+
+
+    def canvasMove(self, index:int = 0) -> None:
+        self.textCreditCV.move(self.creditTxt, self.x, self.y)
+        index+=1
+        if index == 890: self.y = 0
+        self.textCreditCV.after(self.speedText, self.canvasMove, index)
 
 
 class Setting(tk.Frame):
