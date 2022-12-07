@@ -10,7 +10,7 @@ from settings import *
 
 
 class Window(tk.Tk):
-    def __init__(self):
+    def __init__(self) -> None:
         tk.Tk.__init__(self)
         self.resizable(False, False)
         self['bg'] = 'black'
@@ -33,7 +33,7 @@ class Window(tk.Tk):
 
 
 class MenuStartWindow(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
         stopCreditMusic()
         self.background()
@@ -52,31 +52,31 @@ class MenuStartWindow(tk.Frame):
         frameBtn.grid(row = 0, column = 1)
 
         self.btn_start = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command=lambda: master.switch_frame(Game), 
+            font=FONT_HELV, command = lambda: master.switch_frame(Game), 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_start.place(x = 18 , y=150)
 
         self.btn_ruler = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command=lambda: master.switch_frame(Rule), 
+            font=FONT_HELV, command = lambda: master.switch_frame(Rule), 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_ruler.place(x = 18 , y=200)
 
         self.btn_setting = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command=lambda: master.switch_frame(Setting), 
+            font=FONT_HELV, command = lambda: master.switch_frame(Setting), 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_setting.place(x = 18 , y=250)
         
         self.btn_credit = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command=lambda: master.switch_frame(Credit), 
+            font=FONT_HELV, command = lambda: master.switch_frame(Credit), 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_credit.place(x = 18 , y=300)
 
         self.btn_quit = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command=self.confirmBox, 
+            font=FONT_HELV, command = self.confirmBox, 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_quit.place(x = 18 , y=350)
@@ -151,7 +151,7 @@ class ImageLabel(tk.Label):
 
 
 class Game(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
         stopTrainSound()
 
@@ -172,11 +172,13 @@ class Game(tk.Frame):
         self.carriagePosY = 532
         self.showTrainCarriages()
 
+        self.player = Robbery(self, self.canvas, 100, 100, 1)
+
 
         ### button return to the menu:
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
-            command=lambda: master.switch_frame(MenuStartWindow),
+            command = lambda: master.switch_frame(MenuStartWindow),
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
@@ -201,7 +203,7 @@ class Game(tk.Frame):
 
         
 class Rule(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
         stopTrainSound()
 
@@ -216,7 +218,7 @@ class Rule(tk.Frame):
 
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
-            command=lambda: master.switch_frame(MenuStartWindow),
+            command = lambda: master.switch_frame(MenuStartWindow),
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
@@ -232,7 +234,7 @@ class Rule(tk.Frame):
 
 
 class Credit(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
         stopTrainSound()
         if unmute : creditMusic()
@@ -271,7 +273,7 @@ class Credit(tk.Frame):
         self.arrowUpImg = Image.open(path_arrow_icon_up)
         self.arrowUpImg = ImageTk.PhotoImage(self.arrowUpImg)
         self.arrowUpBtn = Button(self.canvas, image=self.arrowUpImg, 
-            command= self.scrollUp, 
+            command = self.scrollUp, 
             bd = 0, bg = TEXT_PURPLE,
             activebackground=TEXT_BLACK, cursor='target',
             borderwidth=0, highlightthickness=0)
@@ -282,7 +284,7 @@ class Credit(tk.Frame):
         self.arrowDownImg.save("./assets/Images/arrow_down.png")
         self.arrowDownImg = ImageTk.PhotoImage(self.arrowDownImg)
         self.arrowDownBtn = Button(self.canvas, image=self.arrowDownImg, 
-            command= self.scrollDown, 
+            command = self.scrollDown, 
             bd = 0, bg = TEXT_PURPLE,
             activebackground=TEXT_BLACK, cursor='target',
             borderwidth=0, highlightthickness=0)
@@ -293,7 +295,7 @@ class Credit(tk.Frame):
         self.githubImg = self.githubImg.resize((50, 50))
         self.githubImg = ImageTk.PhotoImage(self.githubImg)
         self.githubBtn = Button(self.canvas, image=self.githubImg, 
-            command= self.openGitHub, 
+            command = self.openGitHub, 
             bd = 0, bg = TEXT_PURPLE,
             activebackground=TEXT_BLACK, cursor='target',
             borderwidth=0, highlightthickness=0)
@@ -303,7 +305,7 @@ class Credit(tk.Frame):
         self.new = 1
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
-            command=lambda: master.switch_frame(MenuStartWindow),
+            command = lambda: master.switch_frame(MenuStartWindow),
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
@@ -346,7 +348,7 @@ class Credit(tk.Frame):
 
 
 class Setting(tk.Frame):
-    def __init__(self, master):
+    def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
         stopTrainSound()
 
@@ -443,14 +445,14 @@ class Setting(tk.Frame):
         ### Buttons
         self.applyBtn = tk.Button(self, text=english_text['apply'], width = 18,
             fg = 'purple', font=FONT_HELV,
-            command=self.applyChange,
+            command = self.applyChange,
             highlightbackground='#76428A', bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK)
         self.applyBtn.grid(row = 6, column = 0, sticky=W)
 
         self.returnBtn = tk.Button(self, text=english_text['return'], width = 9,
             fg = 'purple', font=FONT_HELV,
-            command=lambda: master.switch_frame(MenuStartWindow),
+            command = lambda: master.switch_frame(MenuStartWindow),
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK, 
             borderwidth = 0)
@@ -551,14 +553,14 @@ class Setting(tk.Frame):
 
 
 class TrainCarriage(): 
-    def __init__(self, canvas, x, y, photo):
+    def __init__(self, canvas, x, y, photo) -> None:
         self.canvas = canvas
         self.x = x
         self.y = y
         self.photo = photo
         self.trainImg()
 
-    def trainImg(self):
+    def trainImg(self) -> None:
         self.image = Image.open(self.photo)
         self.imageSize=self.image.resize(
             (carSizeX, carSizeY), 
@@ -580,32 +582,23 @@ class Robbery():
         self.position = position
         self.position_y = 1
         self.dirct = 1
-        self.showPlayer()
+        self.playerIdle()
         print(self.can.coords(self.img_j))
 
-    def showPlayer(self):
-        ### direction right
-        self.playerRight = Image.open(path_robbery_1_IdleRight + 'Idle_1.png')
-        self.new=self.playerRight.resize((32,32), Image.ANTIALIAS)
-        self.img= ImageTk.PhotoImage(self.new)
-        self.img_j= self.can.create_image(self.pl_x, self.pl_y, image = self.img)
-        
-        ### direction left
-        self.playerLeft= rotate_img((path_robbery_1_IdleRight + 'Idle_1.png'), 90)
-        self.playerLeft.save((path_robbery_1_IdleLeft + 'Idle_1.png'))
-        self.new_r=self.playerLeft.resize((32,32), Image.ANTIALIAS)
-        self.img_r= ImageTk.PhotoImage(self.new_r)
+    def placement(self, x, y) -> None:
+        self.can.move(self.img_j, x, y)
 
-        self.direction()
-        
-    def placement(self,x,y):
-        self.can.move(self.img_j, x,y)
-         
-    def direction(self):
+    def playerIdle(self, item = None, index = 1) -> None:
+        self.can.delete(item)
+
         if self.dirct == 1:
-            self.can.itemconfig(self.img_j, image = self.img)
+            playerImg = self.can.playerImg = PhotoImage(file = path_robbery_1_IdleRight + '/Idle_' + str(index) + '.png')
         else:
-            self.can.itemconfig(self.img_j, image = self.img_r)
+            playerImg = self.can.playerImg = PhotoImage(file = path_robbery_1_IdleLeft + '/Idle_' + + str(index) + '.png')
+        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImg)
+        index += 1
+        if index == 10: index = 1
+        self.can.after(100, self.playerIdle, item, index)
 
 
 ## Sounds
