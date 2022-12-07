@@ -536,22 +536,60 @@ class Setting(tk.Frame):
 
 class TrainCarriage(): 
     def __init__(self, canvas, x, y, photo):
-        self.canvas=canvas
-        self.x=x
-        self.y=y
+        self.canvas = canvas
+        self.x = x
+        self.y = y
         self.photo = photo
-
         self.trainImg()
 
     def trainImg(self):
-        self.i = Image.open(self.photo)
-        self.new=self.i.resize(
+        self.image = Image.open(self.photo)
+        self.imageSize=self.image.resize(
             (carSizeX, carSizeY), 
             Image.ANTIALIAS)
-        self.img= ImageTk.PhotoImage(self.new)
-        self.img_j= self.canvas.create_image(
+        self.trainImage = ImageTk.PhotoImage(self.imageSize)
+        self.trainCarImg = self.canvas.create_image(
             self.x, self.y, 
-            image = self.img)
+            image = self.trainImage)
+
+
+class Robbery(): 
+    def __init__(self, parent, can, pl_x, pl_y, position):
+        self.parent = parent
+        self.pos = 1100
+        self.can = can
+        self.pl_x = pl_x
+        self.pl_y = pl_y
+
+        self.position = position
+        self.position_y = 1
+        self.dirct = 1
+        self.showPlayer()
+        print(self.can.coords(self.img_j))
+
+    def showPlayer(self):
+        ### direction right
+        self.playerRight = Image.open(path_robbery_1_IdleRight + 'Idle_1.png')
+        self.new=self.playerRight.resize((32,32), Image.ANTIALIAS)
+        self.img= ImageTk.PhotoImage(self.new)
+        self.img_j= self.can.create_image(self.pl_x, self.pl_y, image = self.img)
+        
+        ### direction left
+        self.playerLeft= rotate_img((path_robbery_1_IdleRight + 'Idle_1.png'), 90)
+        self.playerLeft.save((path_robbery_1_IdleLeft + 'Idle_1.png'))
+        self.new_r=self.playerLeft.resize((32,32), Image.ANTIALIAS)
+        self.img_r= ImageTk.PhotoImage(self.new_r)
+
+        self.direction()
+        
+    def placement(self,x,y):
+        self.can.move(self.img_j, x,y)
+         
+    def direction(self):
+        if self.dirct == 1:
+            self.can.itemconfig(self.img_j, image = self.img)
+        else:
+            self.can.itemconfig(self.img_j, image = self.img_r)
 
 
 ## Sounds

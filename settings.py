@@ -2,10 +2,11 @@
 
 ####### DATA VALUE (constant): ###########
 NB_WAGONS : int = 4
-NOM_BANDIT_1 : str
+NOM_BANDIT_1 : str = 'Shadow'
+NOM_BANDIT_2 : str = 'Killer'
 NB_ACTIONS : int = 4
-NB_JOUEURS : int
-NB_TOURS : int
+NB_JOUEURS : int = 1
+NB_TOURS : int = 1
 NB_BALLES : int = 6
 
 
@@ -31,6 +32,8 @@ path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_sack_icon : str = "./assets/Images/sack.png"
 path_train_car : str = './assets/Images/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/pixel_train_city.gif'
+path_robbery_1_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight"
+path_robbery_1_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft"
 
 
 ######## LANGUE TEXT SETTING ###########
