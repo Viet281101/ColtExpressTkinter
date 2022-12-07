@@ -1,11 +1,10 @@
 
 # !/usr/bin/python3
-import sys
+import sys, pygame
 import tkinter as tk
 from itertools import count, cycle
 from tkinter import *
 from tkinter import messagebox, ttk
-import pygame
 from PIL import Image, ImageTk
 from settings import *
 
@@ -45,7 +44,7 @@ class MenuStartWindow(tk.Frame):
         self.lbl['bd'] = 0
         self.lbl['cursor'] = 'X_cursor'
         self.lbl.grid(row = 0, column = 0)
-        self.lbl.load('./assets/Images/pixel_train_city.gif')
+        self.lbl.load(path_start_menu_bg)
         if unmute: trainSound()
     
     def buttonGame(self, master) -> None:
@@ -168,10 +167,10 @@ class Game(tk.Frame):
         self.canvas.focus_set()
 
         ##### Set background
-        self.trainPath = './assets/Images/TrainBack.png'
+        self.trainPath = path_train_car
         self.carriagePosX = 148
         self.carriagePosY = 532
-        self.showCarriages()
+        self.showTrainCarriages()
 
 
         ### button return to the menu:
@@ -191,7 +190,7 @@ class Game(tk.Frame):
         elif not langEn and langFr:
             self.returnBtn.config(text=francais_texte['return'])
     
-    def showCarriages(self, index:int = 0) -> None:
+    def showTrainCarriages(self, index:int = 0) -> None:
         self.frames = []
         for _numberCar in range(NB_WAGONS):
             if index >= 1: self.carriagePosX += carSizeX
@@ -269,7 +268,7 @@ class Credit(tk.Frame):
 
 
         #### Scroll up button:
-        self.arrowUpImg = Image.open("./assets/Images/arrow_up.png")
+        self.arrowUpImg = Image.open(path_arrow_icon_up)
         self.arrowUpImg=ImageTk.PhotoImage(self.arrowUpImg)
         self.arrowUpBtn = Button(self.canvas, image=self.arrowUpImg, 
             command= self.scrollUp, 
@@ -279,7 +278,7 @@ class Credit(tk.Frame):
         self.arrowUpBtn.image = self.arrowUpImg
 
         #### Scroll down button:
-        self.arrowDownImg = rotate_img("./assets/Images/arrow_up.png", 180)
+        self.arrowDownImg = rotate_img(path_arrow_icon_up, 180)
         self.arrowDownImg.save("./assets/Images/arrow_down.png")
         self.arrowDownImg=ImageTk.PhotoImage(self.arrowDownImg)
         self.arrowDownBtn = Button(self.canvas, image=self.arrowDownImg, 
@@ -388,9 +387,9 @@ class Setting(tk.Frame):
         self.musicBtnZone = tk.Frame(self, bg = '#000000', width=128, height=23)
         self.musicBtnZone.grid(row=4, column=1, sticky=W)
 
-        self.playImg = Image.open("./assets/Images/volume-icon-play.png")
+        self.playImg = Image.open(path_vol_icon_play)
         self.playImgSize = self.playImg.resize((23, 23))
-        self.pauseImg = Image.open("./assets/Images/volume-icon-pause.png")
+        self.pauseImg = Image.open(path_vol_icon_pause)
         self.pauseImgSize = self.pauseImg.resize((23, 23))
 
         self.unmuteImg = ImageTk.PhotoImage(self.playImgSize)
@@ -573,7 +572,7 @@ def clickSound() -> None:
 def startMenuGame() -> None:
     startMenu = Window()
     startMenu.title('Colt Express')
-    startMenu.iconphoto(False, PhotoImage(file='./assets/Images/sack.png'))
+    startMenu.iconphoto(False, PhotoImage(file= path_sack_icon))
     startMenu.bind('<Escape>', lambda event: startMenu.quit())
     startMenu.mainloop()
 
@@ -594,9 +593,9 @@ if __name__ == '__main__':
 
     #### Load sounds
     pygame.mixer.init()
-    train_sound = pygame.mixer.Sound("./assets/Sound/start_train_sound.wav")
-    credit_music = pygame.mixer.Sound("./assets/Sound/credit_music.wav")
-    click_sound = pygame.mixer.Sound("./assets/Sound/click_01.wav")
+    train_sound = pygame.mixer.Sound(path_train_sound)
+    credit_music = pygame.mixer.Sound(path_credit_menu_music)
+    click_sound = pygame.mixer.Sound(path_click_sound)
 
     #### set lang
     langEn : bool = True

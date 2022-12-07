@@ -1,6 +1,6 @@
 
 
-# Ressources du projet
+# Project resources
 
 
 
