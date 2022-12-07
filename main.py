@@ -1,6 +1,6 @@
 
 # !/usr/bin/python3
-import sys, pygame
+import sys, pygame, webbrowser
 import tkinter as tk
 from itertools import count, cycle
 from tkinter import *
@@ -269,7 +269,7 @@ class Credit(tk.Frame):
 
         #### Scroll up button:
         self.arrowUpImg = Image.open(path_arrow_icon_up)
-        self.arrowUpImg=ImageTk.PhotoImage(self.arrowUpImg)
+        self.arrowUpImg = ImageTk.PhotoImage(self.arrowUpImg)
         self.arrowUpBtn = Button(self.canvas, image=self.arrowUpImg, 
             command= self.scrollUp, 
             bd = 0, bg = TEXT_PURPLE,
@@ -280,15 +280,27 @@ class Credit(tk.Frame):
         #### Scroll down button:
         self.arrowDownImg = rotate_img(path_arrow_icon_up, 180)
         self.arrowDownImg.save("./assets/Images/arrow_down.png")
-        self.arrowDownImg=ImageTk.PhotoImage(self.arrowDownImg)
+        self.arrowDownImg = ImageTk.PhotoImage(self.arrowDownImg)
         self.arrowDownBtn = Button(self.canvas, image=self.arrowDownImg, 
             command= self.scrollDown, 
             bd = 0, bg = TEXT_PURPLE,
             activebackground=TEXT_BLACK, cursor='target',
             borderwidth=0, highlightthickness=0)
         self.arrowDownBtn.image = self.arrowDownImg
+
+        #### GitHub project button:
+        self.githubImg = Image.open(path_github_icon)
+        self.githubImg = self.githubImg.resize((50, 50))
+        self.githubImg = ImageTk.PhotoImage(self.githubImg)
+        self.githubBtn = Button(self.canvas, image=self.githubImg, 
+            command= self.openGitHub, 
+            bd = 0, bg = TEXT_PURPLE,
+            activebackground=TEXT_BLACK, cursor='target',
+            borderwidth=0, highlightthickness=0)
+        self.githubBtn.image = self.githubImg
         
         ### Return button:
+        self.new = 1
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
             command=lambda: master.switch_frame(MenuStartWindow),
@@ -318,7 +330,9 @@ class Credit(tk.Frame):
         if index == 0: 
             self.y = 0; self.arrowDownBtn.place(x = 0, y = 60)
             self.scroll = 0; self.nbrScroll -= 1
-        if index > 950: self.y = 0; self.scroll = 0 
+        if index > 950: 
+            self.y = 0; self.scroll = 0; 
+            self.githubBtn.place(x = 0, y = 60)
         self.textCreditCV.after(self.speedText, self.canvasMove, index)
     
     def scrollUp(self) -> None:
@@ -327,6 +341,8 @@ class Credit(tk.Frame):
     def scrollDown(self) -> None:
         self.arrowDownBtn.destroy()
         self.y = -1; self.scroll = 1
+    def openGitHub(self) -> None:
+        webbrowser.open(url_github_project, new = self.new)
 
 
 class Setting(tk.Frame):
