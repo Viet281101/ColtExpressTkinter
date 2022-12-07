@@ -8,6 +8,11 @@ NB_JOUEURS : int
 NB_TOURS : int
 NB_BALLES : int = 6
 
+
+#### set train carriages image size
+carSizeX : int = 298
+carSizeY : int = 85
+
 ######## DATA COLOR #############
 TEXT_PURPLE : str = '#0a0403'
 TEXT_BLACK : str = '#603c60'

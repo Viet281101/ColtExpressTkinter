@@ -1,14 +1,13 @@
 
 # !/usr/bin/python3
 import sys
-import pygame
-from tkinter import ttk
 import tkinter as tk
-from tkinter import *
-from settings import *
-from PIL import ImageTk, Image
 from itertools import count, cycle
-from tkinter import messagebox
+from tkinter import *
+from tkinter import messagebox, ttk
+import pygame
+from PIL import Image, ImageTk
+from settings import *
 
 
 class Window(tk.Tk):
@@ -118,6 +117,7 @@ class MenuStartWindow(tk.Frame):
         
 
 class ImageLabel(tk.Label):
+    ### Run animation frames in gif file:
     def load(self, im) -> None:
         if isinstance(im, str):
             im = Image.open(im)
@@ -168,9 +168,13 @@ class Game(tk.Frame):
         self.canvas.focus_set()
 
         ##### Set background
-        self.backgroundImg = PhotoImage(file='./assets/Images/BackgroundCity.png')
+        self.trainPath = './assets/Images/TrainBack.png'
+        self.carriagePosX = 148
+        self.carriagePosY = 532
+        self.showCarriages()
 
 
+        ### button return to the menu:
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
             command=lambda: master.switch_frame(MenuStartWindow),
@@ -186,6 +190,15 @@ class Game(tk.Frame):
 
         elif not langEn and langFr:
             self.returnBtn.config(text=francais_texte['return'])
+    
+    def showCarriages(self, index:int = 0) -> None:
+        self.frames = []
+        for _numberCar in range(NB_WAGONS):
+            if index >= 1: self.carriagePosX += carSizeX
+            index += 1
+            self.frames.append(TrainCarriage(self.canvas, 
+                self.carriagePosX, self.carriagePosY, 
+                self.trainPath))
 
         
 class Rule(tk.Frame):
@@ -532,11 +545,14 @@ class TrainCarriage():
         self.trainImg()
 
     def trainImg(self):
-        
         self.i = Image.open(self.photo)
-        self.new=self.i.resize((650,300), Image.ANTIALIAS)
+        self.new=self.i.resize(
+            (carSizeX, carSizeY), 
+            Image.ANTIALIAS)
         self.img= ImageTk.PhotoImage(self.new)
-        self.img_j= self.canvas.create_image(self.x, self.y, image = self.img)
+        self.img_j= self.canvas.create_image(
+            self.x, self.y, 
+            image = self.img)
 
 
 ## Sounds
