@@ -172,7 +172,7 @@ class Game(tk.Frame):
         self.carriagePosY = 532
         self.showTrainCarriages()
 
-        self.player = Robbery(self, self.canvas, 100, 100, 1)
+        self.player = Robbery(self, self.canvas, 80, 533, 1)
 
 
         ### button return to the menu:
@@ -574,7 +574,6 @@ class TrainCarriage():
 class Robbery(): 
     def __init__(self, parent, can, pl_x, pl_y, position):
         self.parent = parent
-        self.pos = 1100
         self.can = can
         self.pl_x = pl_x
         self.pl_y = pl_y
@@ -592,13 +591,25 @@ class Robbery():
         self.can.delete(item)
 
         if self.dirct == 1:
-            playerImg = self.can.playerImg = PhotoImage(file = path_robbery_1_IdleRight + '/Idle_' + str(index) + '.png')
+            playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleRight + str(index) + '.png')
         else:
-            playerImg = self.can.playerImg = PhotoImage(file = path_robbery_1_IdleLeft + '/Idle_' + + str(index) + '.png')
-        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImg)
+            playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleLeft + str(index) + '.png')
+        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
         index += 1
         if index == 10: index = 1
         self.can.after(100, self.playerIdle, item, index)
+    
+    def playerWalk(self, item = None, index = 1) -> None:
+        self.can.delete(item)
+
+        if self.dirct == 1:
+            playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkRight + str(index) + '.png')
+        else:
+            playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkLeft + str(index) + '.png')
+        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
+        index += 1
+        if index == 10: index = 1
+        self.can.after(100, self.playerWalk, item, index)
 
 
 ## Sounds

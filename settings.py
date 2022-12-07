@@ -23,18 +23,22 @@ FONT_HELV : list = ("Helvetica", 15, "bold")
 
 
 ######## SOURCES PATH ##################
+### sounds:
 path_train_sound : str = "./assets/Sound/start_train_sound.wav"
 path_credit_menu_music : str = "./assets/Sound/credit_music.wav"
 path_click_sound : str = "./assets/Sound/click_01.wav"
+### images:
 path_vol_icon_play : str = "./assets/Images/volume-icon-play.png"
 path_vol_icon_pause : str = "./assets/Images/volume-icon-pause.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
-path_sack_icon : str = "./assets/Images/sack.png"
+path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/pixel_train_city.gif'
-path_robbery_1_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight"
-path_robbery_1_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft"
+path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
+path_thief_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft/Idle_"
+path_thief_WalkRight : str = "./assets/Images/Caracters/Thief/WalkRight/Walk_"
+path_thief_WalkLeft : str = "./assets/Images/Caracters/Thief/WalkLeft/Walk_"
 
 url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 
