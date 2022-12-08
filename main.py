@@ -193,7 +193,7 @@ class Game(tk.Frame):
             self.returnBtn.config(text=francais_texte['return'])
     
     def showTrainCarriages(self, index:int = 0) -> None:
-        self.frames = []
+        self.frames : list = []
         for _numberCar in range(NB_WAGONS):
             if index >= 1: self.carriagePosX += carSizeX
             index += 1
@@ -553,7 +553,7 @@ class Setting(tk.Frame):
 
 
 class TrainCarriage(): 
-    def __init__(self, canvas, x, y, photo) -> None:
+    def __init__(self, canvas:Canvas, x:int, y:int, photo) -> None:
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -572,7 +572,7 @@ class TrainCarriage():
 
 
 class Robbery(): 
-    def __init__(self, parent, can, pl_x, pl_y, position):
+    def __init__(self, parent, can:Canvas, pl_x:int, pl_y:int, position:int):
         self.parent = parent
         self.can = can
         self.pl_x = pl_x
@@ -581,13 +581,29 @@ class Robbery():
         self.position = position
         self.position_y = 1
         self.dirct = 1
+        self.state : list = ['idle', 'walk', 'shoot', 'die']
         self.playerIdle()
         print(self.can.coords(self.img_j))
 
     def placement(self, x, y) -> None:
         self.can.move(self.img_j, x, y)
+    
+    def fire(self, target):
+        if self.dirct==1:
+            if (self.can.coords(self.img_j)[0] - target.can.coords( target.img_j)[0]) < 0 and self.position_y== target.position_y:
+                print((self.can.coords(self.img_j)[0] - target.can.coords( target.img_j)[0]))
 
-    def playerIdle(self, item = None, index = 1) -> None:
+            else :
+                print((self.can.coords(self.img_j)[0] -  target.can.coords( target.img_j)[0]))
+        else:
+
+            if (self.can.coords(self.img_j)[0] - target.can.coords( target.img_j)[0])>0 and self.position_y== target.position_y:
+                print((self.can.coords(self.img_j)[0] - target.can.coords( target.img_j)[0]))
+
+            else :
+                print((self.can.coords(self.img_j)[0]-  target.can.coords( target.img_j)[0]))
+
+    def playerIdle(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
 
         if self.dirct == 1:
@@ -599,7 +615,7 @@ class Robbery():
         if index == 10: index = 1
         self.can.after(100, self.playerIdle, item, index)
     
-    def playerWalk(self, item = None, index = 1) -> None:
+    def playerWalk(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
 
         if self.dirct == 1:

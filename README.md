@@ -54,6 +54,8 @@ _2nd year Bachelor of Computer Science_
 _Subject: Programming of interfaces_
 
 
+-----------------------------------
+
 
 ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png)
 
