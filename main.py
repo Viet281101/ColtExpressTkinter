@@ -163,17 +163,19 @@ class Game(tk.Frame):
             height = 576, width = 1194, 
             bd = 0, bg = "#000000",
             highlightthickness = 0)
+        self.bgImg = Image.open(path_background_city)
+        self.bgImg = ImageTk.PhotoImage(self.bgImg)
+        self.background = self.canvas.create_image(0, 260, 
+            anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
-        self.canvas.focus_set()
+        # self.canvas.focus_set()
 
         ##### Set background
         self.trainPath = path_train_car
         self.carriagePosX = 148
         self.carriagePosY = 532
-        self.showTrainCarriages()
-
-        self.player = Robbery(self, self.canvas, 80, 533, 1)
-
+        self.showTrainCarriages() 
+        self.showCaracterGame()
 
         ### button return to the menu:
         self.returnBtn = tk.Button(self.canvas, text="",
@@ -182,9 +184,9 @@ class Game(tk.Frame):
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
-
         self.loadTextLang()
     
+
     def loadTextLang(self) -> None:
         if langEn and not langFr:
             self.returnBtn.config(text=english_text['return'])
@@ -200,6 +202,11 @@ class Game(tk.Frame):
             self.frames.append(TrainCarriage(self.canvas, 
                 self.carriagePosX, self.carriagePosY, 
                 self.trainPath))
+    
+    def showCaracterGame(self) -> None:
+        global state
+        self.player = Robbery(self, self.canvas, 
+            playerPosX, playerPosY, 1)
 
         
 class Rule(tk.Frame):
@@ -365,7 +372,8 @@ class Setting(tk.Frame):
         #### Language Setting
         self.langLbl = tk.Label(self, text="", 
             fg = 'purple', font=FONT_HELV, width = 20,
-            bd = 0, bg ='black', relief=None)
+            bd = 0, bg ='black', relief=None, 
+            anchor=W, justify=LEFT)
         self.langLbl.grid(row = 2, column = 0, sticky = W)
         
         self.Cbstyle = ttk.Style()
@@ -384,7 +392,8 @@ class Setting(tk.Frame):
         ### Sound Setting
         self.soundLbl = tk.Label(self, text = "Sound \nMusic : ", 
             fg = 'purple', font=FONT_HELV, width = 20,
-            bd = 0, bg ='black', relief=None)
+            bd = 0, bg ='black', relief=None, 
+            anchor=W, justify=LEFT)
         self.soundLbl.grid(row = 3, column = 0, sticky = W)
         
         ### Sound Scale
@@ -399,7 +408,8 @@ class Setting(tk.Frame):
         ### Mute and Unmute setting
         self.muteLbl = tk.Label(self, text = "Sound : ", 
             fg = 'purple', font=FONT_HELV, width = 20,
-            bd = 0, bg ='black', relief=None)
+            bd = 0, bg ='black', relief=None, 
+            anchor=W, justify=LEFT)
         self.muteLbl.grid(row=4, column=0, sticky=W)
 
         self.musicBtnZone = tk.Frame(self, bg = '#000000', width=128, height=23)
@@ -581,11 +591,10 @@ class Robbery():
         self.position = position
         self.position_y = 1
         self.dirct = 1
-        self.state : list = ['idle', 'walk', 'shoot', 'die']
         self.playerIdle()
         print(self.can.coords(self.img_j))
 
-    def placement(self, x, y) -> None:
+    def movement(self, x, y) -> None:
         self.can.move(self.img_j, x, y)
     
     def fire(self, target):
@@ -613,7 +622,12 @@ class Robbery():
         self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
         index += 1
         if index == 10: index = 1
-        self.can.after(100, self.playerIdle, item, index)
+
+        if state == str(playerState[0]):
+            self.can.after(100, self.playerIdle, item, index)
+        elif state == str(playerState[1]):
+            self.can.delete(item)
+            self.playerWalk()
     
     def playerWalk(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
@@ -625,7 +639,12 @@ class Robbery():
         self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
         index += 1
         if index == 10: index = 1
-        self.can.after(100, self.playerWalk, item, index)
+        
+        if state == str(playerState[1]):
+            self.can.after(100, self.playerWalk, item, index)
+        elif state == str(playerState[0]):
+            self.can.delete(item)
+            self.playerIdle()
 
 
 ## Sounds
@@ -643,37 +662,35 @@ def clickSound() -> None:
     click_sound.play(1)
     click_sound.set_volume(0.2)
 
+
+#### window setting function
 def startMenuGame() -> None:
     startMenu = Window()
     startMenu.title('Colt Express')
     startMenu.iconphoto(False, PhotoImage(file= path_sack_icon))
+    startMenu.wm_attributes("-topmost", 1)
     startMenu.bind('<Escape>', lambda event: startMenu.quit())
     startMenu.mainloop()
 
+
+#### edit images
 def rotate_img(img_path, rt_degr) -> None:
     img = Image.open(img_path)
     return img.rotate(rt_degr, expand=1)
 
+
+#### main function:
 def main(args) -> None:
     startMenuGame()
 
 
 if __name__ == '__main__':
 
-    #### set volume
-    volume : float = 0.0
-    volume_sound : float = 0.5
-    unmute : bool = True
-
     #### Load sounds
     pygame.mixer.init()
     train_sound = pygame.mixer.Sound(path_train_sound)
     credit_music = pygame.mixer.Sound(path_credit_menu_music)
     click_sound = pygame.mixer.Sound(path_click_sound)
-
-    #### set lang
-    langEn : bool = True
-    langFr : bool = False
 
     ##### main
     main(sys.argv)

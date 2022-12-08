@@ -10,9 +10,25 @@ NB_TOURS : int = 1
 NB_BALLES : int = 6
 
 
-#### set train carriages image size
+#### set train carriages image size:
 carSizeX : int = 298
 carSizeY : int = 85
+
+#### set volume
+volume : float = 0.0
+volume_sound : float = 0.5
+unmute : bool = True
+
+#### player states:
+playerState : list = ['idle', 'walk', 'shoot', 'die']
+state : str = str(playerState[0])
+playerPosX : int = 80
+playerPosY : int = 533
+
+#### set language:
+langEn : bool = True
+langFr : bool = False
+
 
 ######## DATA COLOR #############
 TEXT_PURPLE : str = '#0a0403'
@@ -35,6 +51,8 @@ path_github_icon : str = "./assets/Images/github_icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/pixel_train_city.gif'
+path_background_city : str = "./assets/Images/BackgroundCity.png"
+path_train_full_green : str = "./assets/Images/TrainFullGreen.png"
 path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
 path_thief_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft/Idle_"
 path_thief_WalkRight : str = "./assets/Images/Caracters/Thief/WalkRight/Walk_"
