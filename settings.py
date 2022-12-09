@@ -22,12 +22,17 @@ unmute : bool = True
 #### player states:
 playerState : list = ['idle', 'walk', 'shoot', 'die']
 state : str = str(playerState[0])
+seek : bool = False
 playerPosX : int = 80
 playerPosY : int = 533
 
+
 #### set language:
-langEn : bool = True
-langFr : bool = False
+listCBLangEN : tuple = ('English', 'French', 'Vietnamese')
+listCBLangFR : tuple = ('Anglais', 'Français', 'Vietnamien')
+listCBLangVN : tuple = ('Tiếng Anh', 'Tiếng Pháp', 'Tiếng Việt')
+langList : list = [0, 1, 2] ### 0:EN / 1:FR / 2:VN
+setLang : int = 0 ### set english as language default 
 
 
 ######## DATA COLOR #############
@@ -51,10 +56,11 @@ path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
-path_train_car : str = './assets/Images/TrainBack.png'
+path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/pixel_train_city.gif'
 path_background_city : str = "./assets/Images/BackgroundCity.png"
-path_train_full_green : str = "./assets/Images/TrainFullGreen.png"
+path_train_full_green : str = "./assets/Images/Train/TrainFullGreen.png"
+path_train_full_gray : str = "./assets/Images/Train/TrainFullGray.png"
 path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
 path_thief_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft/Idle_"
 path_thief_WalkRight : str = "./assets/Images/Caracters/Thief/WalkRight/Walk_"
@@ -84,7 +90,7 @@ english_text : dict = {
 }
 
 francais_texte : dict = {
-    'start' : "Partir",
+    'start' : "Jouer",
     'rule' : "Règle",
     'setting' : "Paramètre",
     'language' : "Langue",
@@ -102,6 +108,24 @@ francais_texte : dict = {
     'caracter_shoot' : "Tirer sur un autre bandit proche pour lui faire lâcher son butin.",
 }
 
+vietnamese_text : dict = {
+    'start' : "Bắt đầu",
+    'rule' : "Quy tắc",
+    'setting' : "Cài đặt",
+    'language' : "Ngôn ngữ",
+    'music' : "Âm nhạc",
+    'sound' : "Âm thanh",
+    'volume' : "âm lượng",
+    'apply' : "Áp dụng",
+    'credit' : "Credit",
+    'exit' : "Thoát",
+    'quit' : "Thoát",
+    'return' : "Return",
+    'caracter_move_lr' : "Di chuyển một toa tàu về phía trước hoặc phía sau, hoặc ở trên cùng một tầng.",
+    'caracter_move_ud' : "Đi vào bên trong hoặc trèo lên nóc toa xe hiện tại của họ.",
+    'caracter_rob' : "Cướp khách du lịch để lấy chiến lợi phẩm (hoặc đơn giản là cướp chiến lợi phẩm đã bị bỏ lại ở đó).",
+    'caracter_shoot' : "Bắn một tên cướp khác gần đó để khiến hắn đánh rơi chiến lợi phẩm của mình.",
+}
 
 ########## CREDIT TEXT ######################
 credits_text_eng = '''
@@ -250,5 +274,79 @@ credits_text_fr = '''
 
 ---------------------- MERCI ----------------------
 
+'''
+
+
+credits_text_vn = '''
+---------------------- CREDIT ----------------------
+
+            
+            
+            
+            GIÁM SÁT DỰ ÁN:
+                    Việt Nguyễn
+            
+
+            
+            
+            
+            
+            NGƯỜI THỬ NGHIỆM DỰ ÁN TRÒ CHƠI:
+                    Việt Nguyễn
+            
+
+            
+            
+            
+            
+            LẬP TRÌNH KẾ HOẠCH:
+                    Việt Nguyễn
+
+
+            
+
+
+            HOẠT HÌNH/HÌNH ẢNH:
+                    Việt Nguyễn
+
+            với các nguồn từ:
+                OpenGameArt.com
+                Pixelartmaker.com
+                Tự doSprite
+                itch.io
+
+            
+
+
+            
+            ÂM NHẠC/SFX:
+                    Việt Nguyễn
+            
+            với các nguồn từ:
+                Máy đọc chính tả
+                rfxgen
+
+
+
+            
+
+
+            Ý TƯỞNG DỰ ÁN:
+                    của Oumaima El Joubari
+                    (giáo sư)
+
+
+
+            
+
+            THÔNG TIN NHÀ SẢN XUẤT:
+                    Tên: Việt Nguyễn
+                    Mã số sinh viên: 20006303
+                    Nhóm/lớp : L2_A
+
+
+
+
+---------------------- THANK YOU ----------------------
 '''
 

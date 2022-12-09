@@ -52,7 +52,7 @@ class MenuStartWindow(tk.Frame):
         frameBtn.grid(row = 0, column = 1)
 
         self.btn_start = tk.Button(frameBtn, fg = 'purple', 
-            font=FONT_HELV, command = lambda: master.switch_frame(Game), 
+            font=FONT_HELV, command = lambda: self.startGame(master), 
             width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.btn_start.place(x = 18 , y=150)
@@ -84,32 +84,50 @@ class MenuStartWindow(tk.Frame):
         self.loadTextLang()
 
     def loadTextLang(self) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             self.btn_start.config(text=english_text['start'])
             self.btn_ruler.config(text=english_text['rule'])
             self.btn_setting.config(text=english_text['setting'])
             self.btn_credit.config(text=english_text['credit'])
             self.btn_quit.config(text=english_text['quit'])
         
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             self.btn_start.config(text=francais_texte['start'])
             self.btn_ruler.config(text=francais_texte['rule'])
             self.btn_setting.config(text=francais_texte['setting'])
             self.btn_credit.config(text=francais_texte['credit'])
             self.btn_quit.config(text=francais_texte['quit'])
+        
+        elif setLang == int(langList[2]):
+            self.btn_start.config(text=vietnamese_text['start'])
+            self.btn_ruler.config(text=vietnamese_text['rule'])
+            self.btn_setting.config(text=vietnamese_text['setting'])
+            self.btn_credit.config(text=vietnamese_text['credit'])
+            self.btn_quit.config(text=vietnamese_text['quit'])
+    
+    def startGame(self, master) -> None:
+        master.switch_frame(Game)
+        print('Welcome')
     
     def confirmBox(self) -> None:
         if unmute: clickSound()
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             confirm = messagebox.askquestion('Confirm Box', 
             "Are you sure to quit the game ? \nYour data will not be saved !", 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
 
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             confirm = messagebox.askquestion('Confirm Box', 
             "Etes-vous sûr de quitter le jeu ? \nVos données ne seront pas enregistrées !", 
+            icon='warning')
+            if confirm == 'yes':
+                self.quit()
+        
+        elif setLang == int(langList[2]):
+            confirm = messagebox.askquestion('Confirm Box', 
+            "Bạn có chắc chắn thoát khỏi trò chơi? \nDữ liệu của bạn sẽ không được lưu !", 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
@@ -203,14 +221,17 @@ class Game(tk.Frame):
         self.nolookBtn.place(x = 1160, y = 0)
 
     def changeIconSeek(self) -> None:
-        if self.nolookBtn.image == self.canlookImg:
+        global seek
+        if self.nolookBtn.image == self.canlookImg and not seek:
             self.nolookBtn.config(image=self.nolookImg)
             self.nolookBtn.image = self.nolookImg
             self.showWagon()
-        elif self.nolookBtn.image == self.nolookImg:
+            seek = True
+        elif self.nolookBtn.image == self.nolookImg and seek:
             self.nolookBtn.config(image=self.canlookImg)
             self.nolookBtn.image = self.canlookImg
             self.hideWagon()
+            seek = False
 
     def hideWagon(self) -> None:
         del self.frames_wagon
@@ -223,11 +244,14 @@ class Game(tk.Frame):
 
 
     def loadTextLang(self) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
 
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
+        
+        elif setLang == int(langList[2]):
+            self.returnBtn.config(text=vietnamese_text['return'])
     
     def showTrainCarriages(self, index:int = 0) -> None:
         self.frames : list = []
@@ -267,6 +291,8 @@ class Rule(tk.Frame):
         self.canvas.pack(side=TOP,padx=0,pady=0)
         self.canvas.focus_set()
 
+
+        #### return to the start menu button:
         self.returnBtn = tk.Button(self.canvas, text="",
             fg = 'purple', font=FONT_HELV,
             command = lambda: master.switch_frame(MenuStartWindow),
@@ -277,11 +303,14 @@ class Rule(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
 
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
+        
+        elif setLang == int(langList[2]):
+            self.returnBtn.config(text=vietnamese_text['return'])
 
 
 class Credit(tk.Frame):
@@ -365,13 +394,17 @@ class Credit(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
             self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_eng)
 
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
             self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_fr)
+        
+        elif setLang == int(langList[2]):
+            self.returnBtn.config(text=vietnamese_text['return'])
+            self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_vn)
 
 
     def canvasMove(self, index:int = 0) -> None:
@@ -427,7 +460,7 @@ class Setting(tk.Frame):
         
         self.langTxt = tk.StringVar()
         self.langBox = ttk.Combobox(self, textvariable=self.langTxt, 
-            values=('English', 'French'), width=14)
+            values=listCBLangEN, width=14)
         self.langBox.grid(row = 2, column = 1, sticky = W)
         self.langBox['state'] = 'readonly'
         self.setDefaultLanguage()
@@ -515,7 +548,7 @@ class Setting(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             self.title.config(text = english_text['setting'].upper() + ':')
             self.langLbl.config(text= english_text['language'] + ' : ')
             self.soundLbl.config(
@@ -523,8 +556,10 @@ class Setting(tk.Frame):
             )
             self.applyBtn.config(text=english_text['apply'])
             self.returnBtn.config(text=english_text['return'])
+            self.langBox.delete(0,'end')
+            self.langBox['values'] = listCBLangEN
         
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             self.title.config(text = francais_texte['setting'])
             self.langLbl.config(text= francais_texte['language'] + ' : ')
             self.soundLbl.config(
@@ -532,6 +567,19 @@ class Setting(tk.Frame):
             )
             self.applyBtn.config(text=francais_texte['apply'])
             self.returnBtn.config(text=francais_texte['return'])
+            self.langBox.delete(0,'end')
+            self.langBox['values'] = listCBLangFR
+        
+        elif setLang == int(langList[2]):
+            self.title.config(text = vietnamese_text['setting'])
+            self.langLbl.config(text= vietnamese_text['language'] + ' : ')
+            self.soundLbl.config(
+                text=f"{vietnamese_text['setting']} \n{vietnamese_text['volume']} : "
+            )
+            self.applyBtn.config(text=vietnamese_text['apply'])
+            self.returnBtn.config(text=vietnamese_text['return'])
+            self.langBox.delete(0,'end')
+            self.langBox['values'] = listCBLangVN
     
     def changeIcon(self) -> None:
         global unmute
@@ -545,11 +593,7 @@ class Setting(tk.Frame):
             unmute = True
 
     def setDefaultLanguage(self) -> None:
-        if langEn and not langFr:
-            self.langBox.set('English')
-            
-        elif not langEn and langFr:
-            self.langBox.set('French')
+        self.langBox.current(setLang)
 
     def setDefaultVolumeScale(self) -> None:
         global volume_sound
@@ -566,34 +610,35 @@ class Setting(tk.Frame):
         self.scaleVar.set(float(self.scaleVar.get()) + 5.0)
     
     def updateLang(self, event) -> None:
-        if langEn and not langFr:
+        if setLang == int(langList[0]):
             messagebox.showinfo(
                 title='Language Notification',
                 message=f"You selected {self.langTxt.get()}!\
                     Press 'Apply' to load the language !"
             )
         
-        elif not langEn and langFr:
+        elif setLang == int(langList[1]):
             messagebox.showinfo(
                 title='Langue Notification',
                 message=f"Vous avez sélectionné {self.langTxt.get()}!\
                     Appuyez sur 'Appliquer' pour charger la langue !"
             )
+
+        elif setLang == int(langList[2]):
+            messagebox.showinfo(
+                title='Thông báo ngôn ngữ',
+                message=f"Bạn đã chọn {self.langTxt.get()}!\
+                    Nhấn 'Áp dụng' để tải ngôn ngữ !"
+            )
         
     def applyChange(self) -> None:
         if unmute: clickSound()
-        global langEn, langFr
+        global setLang
         global volume, volume_sound
 
         ##### apply language
-        if str(self.langTxt.get()) == 'English':
-            print('English')
-            langEn = True
-            langFr = False
-        elif str(self.langTxt.get()) == 'French':
-            print('French')
-            langEn = False
-            langFr = True
+        setLang = int(langList[int(self.langBox.current())])
+        print(str(self.langBox.get()))
         
         self.loadTextLang()
         ##### apply volume
