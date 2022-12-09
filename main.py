@@ -168,12 +168,12 @@ class Game(tk.Frame):
         self.background = self.canvas.create_image(0, 260, 
             anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
-        # self.canvas.focus_set()
+        self.canvas.focus_set()
 
         ##### Set background
         self.trainPath = path_train_car
-        self.carriagePosX = 148
-        self.carriagePosY = 532
+        self.carriagePosX = self.fullWagonPosX = 148
+        self.carriagePosY = self.fullWagonPosY = 532
         self.showTrainCarriages() 
         self.showCaracterGame()
 
@@ -185,7 +185,42 @@ class Game(tk.Frame):
             bd = 0, activebackground=TEXT_BLACK, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
         self.loadTextLang()
+
+        ### view inside train button:
+        self.seekImg = Image.open(path_eye_can_look)
+        self.seekImgSize = self.seekImg.resize((30, 30))
+        self.unseekImg = Image.open(path_eye_can_not_look)
+        self.unseekImgSize = self.unseekImg.resize((30, 30))
+
+        self.canlookImg = ImageTk.PhotoImage(self.seekImgSize)
+        self.nolookImg = ImageTk.PhotoImage(self.unseekImgSize)
+
+        self.nolookBtn = tk.Button(self.canvas, image = self.canlookImg, 
+            relief = FLAT, command = self.changeIconSeek, width=30,
+            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
+            activebackground=TEXT_BLACK)
+        self.nolookBtn.image = self.canlookImg
+        self.nolookBtn.place(x = 1160, y = 0)
+
+    def changeIconSeek(self) -> None:
+        if self.nolookBtn.image == self.canlookImg:
+            self.nolookBtn.config(image=self.nolookImg)
+            self.nolookBtn.image = self.nolookImg
+            self.showWagon()
+        elif self.nolookBtn.image == self.nolookImg:
+            self.nolookBtn.config(image=self.canlookImg)
+            self.nolookBtn.image = self.canlookImg
+            self.hideWagon()
+
+    def hideWagon(self) -> None:
+        del self.frames_wagon
+        self.player.movement(playerPosX, playerPosY)
     
+    def showWagon(self) -> None:
+        self.fullWagonPosX = 148
+        self.showTrainFullWagon()
+        self.player.movement(-playerPosX, -playerPosY)
+
 
     def loadTextLang(self) -> None:
         if langEn and not langFr:
@@ -202,6 +237,15 @@ class Game(tk.Frame):
             self.frames.append(TrainCarriage(self.canvas, 
                 self.carriagePosX, self.carriagePosY, 
                 self.trainPath))
+    
+    def showTrainFullWagon(self, index:int = 0) -> None:
+        self.frames_wagon : list = []
+        for _nbrWagon in range(NB_WAGONS):
+            if index >= 1: self.fullWagonPosX += carSizeX
+            index += 1
+            self.frames_wagon.append(TrainCarriage(self.canvas, 
+                self.fullWagonPosX, self.fullWagonPosY, 
+                path_train_full_green))
     
     def showCaracterGame(self) -> None:
         global state
@@ -596,6 +640,8 @@ class Robbery():
 
     def movement(self, x, y) -> None:
         self.can.move(self.img_j, x, y)
+        self.pl_x = x
+        self.pl_y = y
     
     def fire(self, target):
         if self.dirct==1:

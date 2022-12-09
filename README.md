@@ -57,7 +57,7 @@ _Subject: Programming of interfaces_
 -----------------------------------
 
 
-![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png)
+![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png)
 
 
 # Colt Express avec Tkinter Python

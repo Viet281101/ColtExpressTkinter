@@ -46,6 +46,8 @@ path_click_sound : str = "./assets/Sound/click_01.wav"
 ### images:
 path_vol_icon_play : str = "./assets/Images/volume-icon-play.png"
 path_vol_icon_pause : str = "./assets/Images/volume-icon-pause.png"
+path_eye_can_look : str = "./assets/Images/eye_can_look.png"
+path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
