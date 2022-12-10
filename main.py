@@ -135,7 +135,7 @@ class MenuStartWindow(tk.Frame):
 
 class ImageLabel(tk.Label):
     ### Run animation frames in gif file:
-    def load(self, im) -> None:
+    def load(self, im:str) -> None:
         if isinstance(im, str):
             im = Image.open(im)
         frames : list = []
@@ -177,16 +177,19 @@ class Game(tk.Frame):
         ##### Set canvas 
         self.tkraise()
         # self.pack_propagate(False)
+        self.bg_x = -5
+        self.bg_y = 0
         self.canvas = tk.Canvas(self, 
             height = 576, width = 1194, 
             bd = 0, bg = "#000000",
             highlightthickness = 0)
-        self.bgImg = Image.open(path_background_city)
-        self.bgImg = ImageTk.PhotoImage(self.bgImg)
+        self.bgImg = ImageTk.PhotoImage(Image.open(path_background_city))
         self.background = self.canvas.create_image(0, 260, 
             anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
         self.canvas.focus_set()
+        self.runningTrain()
+        
 
         ##### Set background
         self.trainPath = path_train_car
@@ -205,13 +208,8 @@ class Game(tk.Frame):
         self.loadTextLang()
 
         ### view inside train button:
-        self.seekImg = Image.open(path_eye_can_look)
-        self.seekImgSize = self.seekImg.resize((30, 30))
-        self.unseekImg = Image.open(path_eye_can_not_look)
-        self.unseekImgSize = self.unseekImg.resize((30, 30))
-
-        self.canlookImg = ImageTk.PhotoImage(self.seekImgSize)
-        self.nolookImg = ImageTk.PhotoImage(self.unseekImgSize)
+        self.canlookImg = ImageTk.PhotoImage(Image.open(path_eye_can_look).resize((30, 30)))
+        self.nolookImg = ImageTk.PhotoImage(Image.open(path_eye_can_not_look).resize((30, 30)))
 
         self.nolookBtn = tk.Button(self.canvas, image = self.canlookImg, 
             relief = FLAT, command = self.changeIconSeek, width=30,
@@ -219,19 +217,20 @@ class Game(tk.Frame):
             activebackground=TEXT_BLACK)
         self.nolookBtn.image = self.canlookImg
         self.nolookBtn.place(x = 1160, y = 0)
+        self.loadgameData()
 
     def changeIconSeek(self) -> None:
-        global seek
-        if self.nolookBtn.image == self.canlookImg and not seek:
+        global canSeek
+        if self.nolookBtn.image == self.canlookImg and not canSeek:
             self.nolookBtn.config(image=self.nolookImg)
             self.nolookBtn.image = self.nolookImg
             self.showWagon()
-            seek = True
-        elif self.nolookBtn.image == self.nolookImg and seek:
+            canSeek = True
+        elif self.nolookBtn.image == self.nolookImg and canSeek:
             self.nolookBtn.config(image=self.canlookImg)
             self.nolookBtn.image = self.canlookImg
             self.hideWagon()
-            seek = False
+            canSeek = False
 
     def hideWagon(self) -> None:
         del self.frames_wagon
@@ -241,7 +240,6 @@ class Game(tk.Frame):
         self.fullWagonPosX = 148
         self.showTrainFullWagon()
         self.player.movement(-playerPosX, -playerPosY)
-
 
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
@@ -272,9 +270,23 @@ class Game(tk.Frame):
                 path_train_full_green))
     
     def showCaracterGame(self) -> None:
-        global state
         self.player = Robbery(self, self.canvas, 
             playerPosX, playerPosY, 1)
+    
+    def runningTrain(self) -> None:
+        self.canvas.move(self.background, self.bg_x, self.bg_y)
+        # print(self.canvas.coords(self.background)[0])
+        if self.canvas.coords(self.background)[0] <= -4000:
+            self.canvas.delete(self.background)
+            self.background = self.canvas.create_image(0, 260, 
+                anchor = W, image = self.bgImg)
+        self.canvas.after(10, self.runningTrain)
+    
+    def loadgameData(self) -> None:
+        if canSeek:
+            self.nolookBtn.config(image=self.nolookImg)
+            self.nolookBtn.image = self.nolookImg
+            self.showWagon()
 
         
 class Rule(tk.Frame):
@@ -492,13 +504,8 @@ class Setting(tk.Frame):
         self.musicBtnZone = tk.Frame(self, bg = '#000000', width=128, height=23)
         self.musicBtnZone.grid(row=4, column=1, sticky=W)
 
-        self.playImg = Image.open(path_vol_icon_play)
-        self.playImgSize = self.playImg.resize((23, 23))
-        self.pauseImg = Image.open(path_vol_icon_pause)
-        self.pauseImgSize = self.pauseImg.resize((23, 23))
-
-        self.unmuteImg = ImageTk.PhotoImage(self.playImgSize)
-        self.muteImg = ImageTk.PhotoImage(self.pauseImgSize)
+        self.unmuteImg = ImageTk.PhotoImage(Image.open(path_vol_icon_play).resize((23, 23)))
+        self.muteImg = ImageTk.PhotoImage(Image.open(path_vol_icon_pause).resize((23, 23)))
 
         self.muteBtn = tk.Button(self.musicBtnZone, image = self.unmuteImg, 
             relief = FLAT, command = self.changeIcon, width=30,
@@ -571,7 +578,7 @@ class Setting(tk.Frame):
             self.langBox['values'] = listCBLangFR
         
         elif setLang == int(langList[2]):
-            self.title.config(text = vietnamese_text['setting'])
+            self.title.config(text = vietnamese_text['setting'] + ':')
             self.langLbl.config(text= vietnamese_text['language'] + ' : ')
             self.soundLbl.config(
                 text=f"{vietnamese_text['setting']} \n{vietnamese_text['volume']} : "
@@ -710,7 +717,8 @@ class Robbery():
             playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleRight + str(index) + '.png')
         else:
             playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleLeft + str(index) + '.png')
-        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
+        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
+        self.img_j =  item
         index += 1
         if index == 10: index = 1
 
@@ -727,7 +735,8 @@ class Robbery():
             playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkRight + str(index) + '.png')
         else:
             playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkLeft + str(index) + '.png')
-        self.img_j = item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
+        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
+        self.img_j = item
         index += 1
         if index == 10: index = 1
         
@@ -736,6 +745,41 @@ class Robbery():
         elif state == str(playerState[0]):
             self.can.delete(item)
             self.playerIdle()
+
+
+class ActionBtn(Button):
+    def __init__(self, window : Tk, player, target, direction, imgBtn):
+        super().__init__(window, width=50, height=50, 
+            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
+            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+        self.fenetre = window
+        self.target = target
+        self.imgBtn = imgBtn
+        self.image = ImageTk.PhotoImage(Image.open(imgBtn).resize((50, 50)))
+        self.config(image = self.image)
+        self.player = player
+        self.direction = direction
+    
+        if self.direction == "right":
+            self.config(command=self.goRight)
+        elif self.direction == "left":
+            self.config(command=self.goLeft)
+        elif self.direction == "up":
+            self.config(command=self.goUp)
+        elif self.direction == "attack":
+            self.config(command=self.attack)
+    
+    def goRight(self) -> None:
+        pass
+
+    def goLeft(self) -> None:
+        pass
+
+    def goUp(self) -> None:
+        pass
+
+    def attack(self) -> None:
+        pass
 
 
 ## Sounds

@@ -22,7 +22,7 @@ unmute : bool = True
 #### player states:
 playerState : list = ['idle', 'walk', 'shoot', 'die']
 state : str = str(playerState[0])
-seek : bool = False
+canSeek : bool = False
 playerPosX : int = 80
 playerPosY : int = 533
 
@@ -57,8 +57,9 @@ path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/Train/TrainBack.png'
-path_start_menu_bg : str = './assets/Images/pixel_train_city.gif'
-path_background_city : str = "./assets/Images/BackgroundCity.png"
+path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
+path_background_city : str = "./assets/Images/Background/BackgroundCity.png"
+path_cloud_bg : str = './assets/Images/Background/cloud.png'
 path_train_full_green : str = "./assets/Images/Train/TrainFullGreen.png"
 path_train_full_gray : str = "./assets/Images/Train/TrainFullGray.png"
 path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"

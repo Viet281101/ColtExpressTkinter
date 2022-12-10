@@ -57,12 +57,11 @@ _Subject: Programming of interfaces_
 -----------------------------------
 
 
-![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png)
+![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png)
 
 
 # Colt Express avec Tkinter Python
 
-![train pixel test](./assets/Images/Train/train_pixel_test.png)
 
 ### Thème du projet :
 Ce projet vous invite à construire une version électronique et quelque peu simplifiée du jeu Colt Express de Python.
@@ -112,3 +111,5 @@ _2 ème année Licence Informatique_
 
 _Matière: Programmation d’interfaces_
 
+
+![train pixel test](./assets/Images/Train/train_pixel_test.png)
