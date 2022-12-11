@@ -194,6 +194,7 @@ class Game(tk.Frame):
 
         ##### Set background
         self.trainPath = path_train_car
+        self.createClouds()
         self.setDefaultTrain()
         self.showTrainCarriages() 
         self.showCaracterGame()
@@ -364,6 +365,10 @@ class Game(tk.Frame):
             self.background = self.canvas.create_image(0, 260, 
                 anchor = W, image = self.bgImg)
         self.canvas.after(10, self.runningTrain)
+
+    def createClouds(self):
+        Clouds(self, self.canvas)
+        self.after(900, self.createClouds)
     
     def loadgameData(self) -> None:
         if canSeek:
@@ -889,30 +894,27 @@ class ActionBtn(Button):
 
 class Clouds():
     def __init__(self,parent,canvas):
-        self.parent = parent                    
-        self.canvas = canvas                                     
-        self.fallSpeed = 50                          
-        self.yPosition = randint(0, 370)        
-        self.xPosition = randint(1900,2200)
-        self.isgood = randint(0, 1)             
-        self.vitesse = randint(-25,-10) 
-        self.goodItems = [path_cloud_bg, path_cloud_2_bg]
-        
+        self.parent = parent
+        self.canvas = canvas
+        self.fallSpeed = randint(35, 55)
+        self.yPosition = randint(140, 260)        
+        self.xPosition = randint(1200, 1300)
+        self.isgood = randint(0, 1)
+        self.vitesse = randint(-25,-10)
+        self.goodItems = [path_cloud_bg, path_cloud_2_bg, path_cloud_3_bg]
         # create falling items
-        self.itemPhoto = PhotoImage(file = "{}" .format( choice(self.goodItems) ) )
-        self.fallItem = self.canvas.create_image( (self.xPosition ,self.yPosition) , image=self.itemPhoto , tag="good" )
-            
+        self.itemPhoto = ImageTk.PhotoImage(Image.open(f"{choice(self.goodItems)}").resize((randint(120, 140), randint(84, 92))))
+        self.fallItem = self.canvas.create_image( (self.xPosition ,self.yPosition),
+            image=self.itemPhoto , tag="good")
         # trigger falling item movement
-        self.placement_dc()
+        self.movingClouds()
         
-    def placement_dc(self):
-        # dont move x, move y
+    def movingClouds(self):
         self.canvas.move(self.fallItem, self.vitesse, 0)
-        
-        if (self.canvas.coords(self.fallItem)[0] < -100):
-            self.canvas.delete(self.fallItem)                                           
+        if (self.canvas.coords(self.fallItem)[0] < randint(-100, 200)):
+            self.canvas.delete(self.fallItem)
         else:
-            self.parent.after(self.fallSpeed, self.placement_dc)   
+            self.parent.after(self.fallSpeed, self.movingClouds)
 
 
 ## Sounds
