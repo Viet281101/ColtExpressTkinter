@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import messagebox, ttk
 from PIL import Image, ImageTk
 from settings import *
+from random import *
 
 
 class Window(tk.Tk):
@@ -85,21 +86,21 @@ class MenuStartWindow(tk.Frame):
 
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
-            self.btn_start.config(text=english_text['start'])
+            self.btn_start.config(text=english_text['play'])
             self.btn_ruler.config(text=english_text['rule'])
             self.btn_setting.config(text=english_text['setting'])
             self.btn_credit.config(text=english_text['credit'])
             self.btn_quit.config(text=english_text['quit'])
         
         elif setLang == int(langList[1]):
-            self.btn_start.config(text=francais_texte['start'])
+            self.btn_start.config(text=francais_texte['play'])
             self.btn_ruler.config(text=francais_texte['rule'])
             self.btn_setting.config(text=francais_texte['setting'])
             self.btn_credit.config(text=francais_texte['credit'])
             self.btn_quit.config(text=francais_texte['quit'])
         
         elif setLang == int(langList[2]):
-            self.btn_start.config(text=vietnamese_text['start'])
+            self.btn_start.config(text=vietnamese_text['play'])
             self.btn_ruler.config(text=vietnamese_text['rule'])
             self.btn_setting.config(text=vietnamese_text['setting'])
             self.btn_credit.config(text=vietnamese_text['credit'])
@@ -113,21 +114,21 @@ class MenuStartWindow(tk.Frame):
         if unmute: clickSound()
         if setLang == int(langList[0]):
             confirm = messagebox.askquestion('Confirm Box', 
-            "Are you sure to quit the game ? \nYour data will not be saved !", 
+            english_text['confirm_quit'], 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
 
         elif setLang == int(langList[1]):
             confirm = messagebox.askquestion('Confirm Box', 
-            "Etes-vous sûr de quitter le jeu ? \nVos données ne seront pas enregistrées !", 
+            francais_texte['confirm_quit'], 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
         
         elif setLang == int(langList[2]):
             confirm = messagebox.askquestion('Confirm Box', 
-            "Bạn có chắc chắn thoát khỏi trò chơi? \nDữ liệu của bạn sẽ không được lưu !", 
+            vietnamese_text['confirm_quit'],
             icon='warning')
             if confirm == 'yes':
                 self.quit()
@@ -183,7 +184,7 @@ class Game(tk.Frame):
             height = 576, width = 1194, 
             bd = 0, bg = "#000000",
             highlightthickness = 0)
-        self.bgImg = ImageTk.PhotoImage(Image.open(path_background_city))
+        self.bgImg = ImageTk.PhotoImage(Image.open(path_background_city).resize((5466, 328)))
         self.background = self.canvas.create_image(0, 260, 
             anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
@@ -193,8 +194,7 @@ class Game(tk.Frame):
 
         ##### Set background
         self.trainPath = path_train_car
-        self.carriagePosX = self.fullWagonPosX = 148
-        self.carriagePosY = self.fullWagonPosY = 532
+        self.setDefaultTrain()
         self.showTrainCarriages() 
         self.showCaracterGame()
 
@@ -217,29 +217,87 @@ class Game(tk.Frame):
             activebackground=TEXT_BLACK)
         self.nolookBtn.image = self.canlookImg
         self.nolookBtn.place(x = 1160, y = 0)
+
+        ### button set number wagon
+        self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((20, 20)))
+        self.minusImg = ImageTk.PhotoImage(Image.open(path_minus_icon).resize((20, 20)))
+
+        self.minusBtn = tk.Button(self.canvas, image = self.plusImg, 
+            relief = FLAT, command = self.setNbrWagon, width=30,
+            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
+            activebackground=TEXT_BLACK)
+        self.minusBtn.image = self.plusImg
+        self.minusBtn.place(x = 1125, y = 5)
         self.loadgameData()
 
+        self.canvas.bind('<KeyPress-Left>', lambda e: self.player.movement(playerPosX + 40, playerPosY))
+
     def changeIconSeek(self) -> None:
-        global canSeek
         if self.nolookBtn.image == self.canlookImg and not canSeek:
             self.nolookBtn.config(image=self.nolookImg)
             self.nolookBtn.image = self.nolookImg
             self.showWagon()
-            canSeek = True
         elif self.nolookBtn.image == self.nolookImg and canSeek:
             self.nolookBtn.config(image=self.canlookImg)
             self.nolookBtn.image = self.canlookImg
             self.hideWagon()
-            canSeek = False
+    
+    def setNbrWagon(self) -> None:
+        global nb_wagons, canPlusWG
+        if self.minusBtn.image == self.plusImg and canPlusWG:
+            nb_wagons += 1; self.refreshTrain()
+            canPlusWG = False
+        elif self.minusBtn.image == self.minusImg and not canPlusWG:
+            nb_wagons -= 1; self.refreshTrain()
+            canPlusWG = True
+        self.changeIconMinus()
+
+    def changeIconMinus(self) -> None:
+        if not canPlusWG: 
+            self.minusBtn.config(image=self.minusImg)
+            self.minusBtn.image = self.minusImg
+        else: 
+            self.minusBtn.config(image=self.plusImg)
+            self.minusBtn.image = self.plusImg
+
+    def refreshTrain(self) -> None:
+        global canAnimate, playerPosX, playerPosY, playerSizeX, playerSizeY
+        global carSizeX, carSizeY, fullSizeX
+        del self.frames
+        if showFull: 
+            self.nolookBtn.config(image=self.canlookImg)
+            self.nolookBtn.image = self.canlookImg
+            self.hideWagon()
+        if nb_wagons == 4: 
+            carSizeX = 298; carSizeY = 85; fullSizeX = 148
+            self.carriagePosX = self.fullWagonPosX = fullSizeX
+            self.carriagePosY = self.fullWagonPosY = 532
+            if not outsideTrain: playerPosY += 14
+            playerPosX -= 30
+            playerSizeX = playerSizeY = 32
+        elif nb_wagons == 3:
+            carSizeX = 400; carSizeY = 120; fullSizeX = 195
+            self.carriagePosX = self.fullWagonPosX = fullSizeX
+            self.carriagePosY = self.fullWagonPosY = 518
+            if not outsideTrain: playerPosY -= 14
+            playerPosX +=30
+            playerSizeX = playerSizeY = 48
+        self.showTrainCarriages()
+        self.player.movement(playerPosX, playerPosY)
+
 
     def hideWagon(self) -> None:
+        global canSeek, showFull
         del self.frames_wagon
         self.player.movement(playerPosX, playerPosY)
+        canSeek = False; showFull = False
     
     def showWagon(self) -> None:
-        self.fullWagonPosX = 148
+        global canSeek, showFull
+        self.fullWagonPosX = fullSizeX
         self.showTrainFullWagon()
         self.player.movement(-playerPosX, -playerPosY)
+        canSeek = True; showFull = True
 
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
@@ -251,27 +309,52 @@ class Game(tk.Frame):
         elif setLang == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
     
+    def setDefaultTrain(self) -> None:
+        global carSizeX, carSizeY, fullSizeX
+        global playerPosX, playerPosY, playerSizeX, playerSizeY
+        if nb_wagons == 4: 
+            carSizeX = 298; carSizeY = 85; fullSizeX = 148
+            self.carriagePosX = self.fullWagonPosX = fullSizeX
+            self.carriagePosY = self.fullWagonPosY = 532
+            if not saveGame:
+                if not outsideTrain: playerPosY = 533
+                playerPosX = 80
+                playerSizeX = playerSizeY = 32
+        elif nb_wagons == 3:
+            carSizeX = 400; carSizeY = 120; fullSizeX = 195
+            self.carriagePosX = self.fullWagonPosX = fullSizeX
+            self.carriagePosY = self.fullWagonPosY = 518
+            if not saveGame:
+                if not outsideTrain: playerPosY = 519
+                playerPosX = 110
+                playerSizeX = playerSizeY = 48
+        
+    
     def showTrainCarriages(self, index:int = 0) -> None:
         self.frames : list = []
-        for _numberCar in range(NB_WAGONS):
+        for _numberCar in range(nb_wagons):
             if index >= 1: self.carriagePosX += carSizeX
             index += 1
             self.frames.append(TrainCarriage(self.canvas, 
                 self.carriagePosX, self.carriagePosY, 
+                carSizeX, carSizeY,
                 self.trainPath))
     
     def showTrainFullWagon(self, index:int = 0) -> None:
         self.frames_wagon : list = []
-        for _nbrWagon in range(NB_WAGONS):
+        for _nbrWagon in range(nb_wagons):
             if index >= 1: self.fullWagonPosX += carSizeX
             index += 1
             self.frames_wagon.append(TrainCarriage(self.canvas, 
                 self.fullWagonPosX, self.fullWagonPosY, 
+                carSizeX, carSizeY,
                 path_train_full_green))
     
     def showCaracterGame(self) -> None:
-        self.player = Robbery(self, self.canvas, 
+        global canAnimate
+        self.player = Player(self, self.canvas, 
             playerPosX, playerPosY, 1)
+        canAnimate = True
     
     def runningTrain(self) -> None:
         self.canvas.move(self.background, self.bg_x, self.bg_y)
@@ -287,6 +370,7 @@ class Game(tk.Frame):
             self.nolookBtn.config(image=self.nolookImg)
             self.nolookBtn.image = self.nolookImg
             self.showWagon()
+        self.changeIconMinus()
 
         
 class Rule(tk.Frame):
@@ -515,20 +599,22 @@ class Setting(tk.Frame):
         self.muteBtn.place(x = 47, y = 0)
 
         ### Buttons to change the value of scale sound
-        self.decreaseScaleVar = tk.Button(self.musicBtnZone, text='-',
-            fg = '#ff00d7', font=FONT_HELV, width=1, height=1,
-            relief = FLAT, command = self.decreaseSoundScale,
+        self.minusImg = ImageTk.PhotoImage(Image.open(path_minus_icon).resize((23, 23)))
+        self.decreaseScaleVar = tk.Button(self.musicBtnZone, image = self.minusImg, 
+            width=30, relief = FLAT, command = self.decreaseSoundScale,
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK)
+        self.decreaseScaleVar.image = self.minusImg
         self.decreaseScaleVar.place(x = 0, y = 0)
-
-        self.increaseScaleVar = tk.Button(self.musicBtnZone, text='+',
-            fg = '#ff00d7', font=FONT_HELV, width=1, height=1,
-            relief = FLAT, command = self.increaseSoundScale,
+        
+        self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((23, 23)))
+        self.increaseScaleVar = tk.Button(self.musicBtnZone, image=self.plusImg, 
+            width=30, relief = FLAT, command = self.increaseSoundScale,
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK)
-        self.increaseScaleVar.place(x = 91, y = 0)
-
+        self.increaseScaleVar.image = self.minusImg
+        self.increaseScaleVar.place(x = 93, y = 0)
+        
         self.setDefaultVolumeScale()
 
         ### Space vertical
@@ -620,22 +706,19 @@ class Setting(tk.Frame):
         if setLang == int(langList[0]):
             messagebox.showinfo(
                 title='Language Notification',
-                message=f"You selected {self.langTxt.get()}!\
-                    Press 'Apply' to load the language !"
+                message=f"You selected {self.langTxt.get()}!\n"+english_text['lang_not']
             )
         
         elif setLang == int(langList[1]):
             messagebox.showinfo(
                 title='Langue Notification',
-                message=f"Vous avez sélectionné {self.langTxt.get()}!\
-                    Appuyez sur 'Appliquer' pour charger la langue !"
+                message=f"Vous avez sélectionné {self.langTxt.get()}!\n"+francais_texte['lang_not']
             )
 
         elif setLang == int(langList[2]):
             messagebox.showinfo(
                 title='Thông báo ngôn ngữ',
-                message=f"Bạn đã chọn {self.langTxt.get()}!\
-                    Nhấn 'Áp dụng' để tải ngôn ngữ !"
+                message=f"Bạn đã chọn {self.langTxt.get()}!\n"+vietnamese_text['lang_not']
             )
         
     def applyChange(self) -> None:
@@ -659,17 +742,19 @@ class Setting(tk.Frame):
 
 
 class TrainCarriage(): 
-    def __init__(self, canvas:Canvas, x:int, y:int, photo) -> None:
+    def __init__(self, canvas:Canvas, x:int, y:int, size_x:int, size_y:int, photo) -> None:
         self.canvas = canvas
         self.x = x
         self.y = y
+        self.size_x = size_x
+        self.size_y = size_y
         self.photo = photo
         self.trainImg()
 
     def trainImg(self) -> None:
         self.image = Image.open(self.photo)
         self.imageSize=self.image.resize(
-            (carSizeX, carSizeY), 
+            (self.size_x, self.size_y), 
             Image.ANTIALIAS)
         self.trainImage = ImageTk.PhotoImage(self.imageSize)
         self.trainCarImg = self.canvas.create_image(
@@ -677,7 +762,24 @@ class TrainCarriage():
             image = self.trainImage)
 
 
-class Robbery(): 
+class Items():
+    def __init__(self, canvas:Canvas, x:int, y:int, size_x:int, size_y:int, price:int, photo) -> None:
+        self.canvas = canvas
+        self.x = x
+        self.y = y
+        self.size_x = size_x
+        self.size_y = size_y
+        self.price = price
+        self.photo = photo
+        print(self.canvas.coords(self.photo))
+        self.showItems()
+
+    def showItems(self) -> None:
+        self.itemImg = ImageTk.PhotoImage(Image.open(self.photo).resize((self.size_x, self.size_y), Image.ANTIALIAS))
+        self.showItem = self.canvas.create_image(self.x, self.y, image=self.itemImg)
+
+
+class Player(): 
     def __init__(self, parent, can:Canvas, pl_x:int, pl_y:int, position:int):
         self.parent = parent
         self.can = can
@@ -714,37 +816,39 @@ class Robbery():
         self.can.delete(item)
 
         if self.dirct == 1:
-            playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleRight + str(index) + '.png')
+            playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
         else:
-            playerImgIdle = self.can.playerImgIdle = PhotoImage(file = path_thief_IdleLeft + str(index) + '.png')
+            playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
         self.img_j =  item
         index += 1
         if index == 10: index = 1
 
-        if state == str(playerState[0]):
-            self.can.after(100, self.playerIdle, item, index)
-        elif state == str(playerState[1]):
-            self.can.delete(item)
-            self.playerWalk()
+        if canAnimate:
+            if state == str(playerState[0]):
+                self.can.after(100, self.playerIdle, item, index)
+            elif state == str(playerState[1]):
+                self.can.delete(item)
+                self.playerWalk()
     
     def playerWalk(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
 
         if self.dirct == 1:
-            playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkRight + str(index) + '.png')
+            playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
         else:
-            playerImgWalk = self.can.playerImgWalk = PhotoImage(file = path_thief_WalkLeft + str(index) + '.png')
+            playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
         self.img_j = item
         index += 1
         if index == 10: index = 1
         
-        if state == str(playerState[1]):
-            self.can.after(100, self.playerWalk, item, index)
-        elif state == str(playerState[0]):
-            self.can.delete(item)
-            self.playerIdle()
+        if canAnimate:
+            if state == str(playerState[1]):
+                self.can.after(100, self.playerWalk, item, index)
+            elif state == str(playerState[0]):
+                self.can.delete(item)
+                self.playerIdle()
 
 
 class ActionBtn(Button):
@@ -780,6 +884,35 @@ class ActionBtn(Button):
 
     def attack(self) -> None:
         pass
+
+
+
+class Clouds():
+    def __init__(self,parent,canvas):
+        self.parent = parent                    
+        self.canvas = canvas                                     
+        self.fallSpeed = 50                          
+        self.yPosition = randint(0, 370)        
+        self.xPosition = randint(1900,2200)
+        self.isgood = randint(0, 1)             
+        self.vitesse = randint(-25,-10) 
+        self.goodItems = [path_cloud_bg, path_cloud_2_bg]
+        
+        # create falling items
+        self.itemPhoto = PhotoImage(file = "{}" .format( choice(self.goodItems) ) )
+        self.fallItem = self.canvas.create_image( (self.xPosition ,self.yPosition) , image=self.itemPhoto , tag="good" )
+            
+        # trigger falling item movement
+        self.placement_dc()
+        
+    def placement_dc(self):
+        # dont move x, move y
+        self.canvas.move(self.fallItem, self.vitesse, 0)
+        
+        if (self.canvas.coords(self.fallItem)[0] < -100):
+            self.canvas.delete(self.fallItem)                                           
+        else:
+            self.parent.after(self.fallSpeed, self.placement_dc)   
 
 
 ## Sounds

@@ -1,7 +1,7 @@
 
 
 ####### DATA VALUE (constant): ###########
-NB_WAGONS : int = 4
+
 NOM_BANDIT_1 : str = 'Shadow'
 NOM_BANDIT_2 : str = 'Killer'
 NB_ACTIONS : int = 4
@@ -10,9 +10,19 @@ NB_TOURS : int = 1
 NB_BALLES : int = 6
 
 
+
+############ GAME DATA (for save and load): ############
+saveGame : bool = False
+
+### for fixing value:
+nb_wagons : int = 3
+canPlusWG : bool = True
+
 #### set train carriages image size:
 carSizeX : int = 298
 carSizeY : int = 85
+fullSizeX : int = 148
+showFull : bool = False
 
 #### set volume
 volume : float = 0.0
@@ -23,8 +33,12 @@ unmute : bool = True
 playerState : list = ['idle', 'walk', 'shoot', 'die']
 state : str = str(playerState[0])
 canSeek : bool = False
+canAnimate : bool = True
+outsideTrain : bool = False
 playerPosX : int = 80
 playerPosY : int = 533
+playerSizeX : int = 32
+playerSizeY : int = 32
 
 
 #### set language:
@@ -51,6 +65,8 @@ path_click_sound : str = "./assets/Sound/click_01.wav"
 ### images:
 path_vol_icon_play : str = "./assets/Images/volume-icon-play.png"
 path_vol_icon_pause : str = "./assets/Images/volume-icon-pause.png"
+path_plus_icon : str = "./assets/Images/plus-icon.png"
+path_minus_icon : str = "./assets/Images/minus-icon.png"
 path_eye_can_look : str = "./assets/Images/eye_can_look.png"
 path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
@@ -60,6 +76,7 @@ path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
 path_background_city : str = "./assets/Images/Background/BackgroundCity.png"
 path_cloud_bg : str = './assets/Images/Background/cloud.png'
+path_cloud_2_bg : str = './assets/Images/Background/cloud_2.png'
 path_train_full_green : str = "./assets/Images/Train/TrainFullGreen.png"
 path_train_full_gray : str = "./assets/Images/Train/TrainFullGray.png"
 path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
@@ -72,7 +89,7 @@ url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 
 ######## LANGUE TEXT SETTING ###########
 english_text : dict = {
-    'start' : "Start",
+    'play' : "Play",
     'rule' : "Rules",
     'setting' : "Setting",
     'language' : "Language",
@@ -84,6 +101,8 @@ english_text : dict = {
     'exit' : "Exit",
     'quit' : "Quit",
     'return' : "Return",
+    'lang_not' : "Press 'Apply' to load the language !",
+    'confirm_quit' : "Are you sure to quit the game ? \nYour data will not be saved !",
     'caracter_move_lr' : "Move one car forward or backward, staying on the same floor.",
     'caracter_move_ud' : "Go inside or climb onto the roof of their current wagon.",
     'caracter_rob' : "Rob a traveler to retrieve loot (or simply loot loot that has been left there).",
@@ -91,7 +110,7 @@ english_text : dict = {
 }
 
 francais_texte : dict = {
-    'start' : "Jouer",
+    'play' : "Jouer",
     'rule' : "Règle",
     'setting' : "Paramètre",
     'language' : "Langue",
@@ -103,6 +122,8 @@ francais_texte : dict = {
     'exit' : "Sortir",
     'quit' : "Quitté",
     'return' : "Retourne",
+    'lang_not' : "Appuyez sur 'Appliquer' pour charger la langue !",
+    'confirm_quit' : "Etes-vous sûr de quitter le jeu ? \nVos données ne seront pas enregistrées !",
     'caracter_move_lr' : "Se déplacer d'un wagon en avant ou en arrière, en restant au même étage.",
     'caracter_move_ud' : "Aller à l'intérieur ou grimper sur le toit de leur wagon actuel.",
     'caracter_rob' : "Braquer un voyageur pour récupérer du butin (ou simplement récupérer un butin qui a été abandonné là).",
@@ -110,7 +131,7 @@ francais_texte : dict = {
 }
 
 vietnamese_text : dict = {
-    'start' : "Bắt đầu",
+    'play' : "Chơi",
     'rule' : "Quy tắc",
     'setting' : "Cài đặt",
     'language' : "Ngôn ngữ",
@@ -118,10 +139,12 @@ vietnamese_text : dict = {
     'sound' : "Âm thanh",
     'volume' : "âm lượng",
     'apply' : "Áp dụng",
-    'credit' : "Credit",
+    'credit' : "Dự án",
     'exit' : "Thoát",
     'quit' : "Thoát",
-    'return' : "Return",
+    'return' : "Trở về",
+    'lang_not' : "Nhấn 'Áp dụng' để tải ngôn ngữ !",
+    'confirm_quit' : "Bạn có chắc chắn thoát khỏi trò chơi? \nDữ liệu của bạn sẽ không được lưu !",
     'caracter_move_lr' : "Di chuyển một toa tàu về phía trước hoặc phía sau, hoặc ở trên cùng một tầng.",
     'caracter_move_ud' : "Đi vào bên trong hoặc trèo lên nóc toa xe hiện tại của họ.",
     'caracter_rob' : "Cướp khách du lịch để lấy chiến lợi phẩm (hoặc đơn giản là cướp chiến lợi phẩm đã bị bỏ lại ở đó).",
