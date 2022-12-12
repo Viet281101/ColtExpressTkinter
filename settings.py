@@ -23,6 +23,7 @@ carSizeX : int = 298
 carSizeY : int = 85
 fullSizeX : int = 148
 showFull : bool = False
+canSeek : bool = False
 
 #### set volume
 volume : float = 0.0
@@ -32,8 +33,6 @@ unmute : bool = True
 #### player states:
 playerState : list = ['idle', 'walk', 'shoot', 'die']
 state : str = str(playerState[0])
-canSeek : bool = False
-canAnimate : bool = True
 outsideTrain : bool = False
 playerPosX : int = 80
 playerPosY : int = 533
@@ -74,7 +73,7 @@ path_github_icon : str = "./assets/Images/github_icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
-path_background_city : str = "./assets/Images/Background/BackgroundCity2.png"
+path_background_city : str = "./assets/Images/Background/BackgroundCity.png"
 path_cloud_bg : str = './assets/Images/Background/clouds1.png'
 path_cloud_2_bg : str = './assets/Images/Background/clouds2.png'
 path_cloud_3_bg : str = './assets/Images/Background/clouds3.png'

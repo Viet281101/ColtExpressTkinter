@@ -231,7 +231,8 @@ class Game(tk.Frame):
         self.minusBtn.place(x = 1125, y = 5)
         self.loadgameData()
 
-        self.canvas.bind('<KeyPress-Left>', lambda e: self.player.movement(playerPosX + 40, playerPosY))
+        self.canvas.bind('<KeyPress-Left>', lambda e: self.player.playerMoveLeft(e))
+        self.canvas.bind('<KeyPress-Right>', lambda e: self.player.playerMoveRight(e))
 
     def changeIconSeek(self) -> None:
         if self.nolookBtn.image == self.canlookImg and not canSeek:
@@ -352,10 +353,8 @@ class Game(tk.Frame):
                 path_train_full_green))
     
     def showCaracterGame(self) -> None:
-        global canAnimate
         self.player = Player(self, self.canvas, 
             playerPosX, playerPosY, 1)
-        canAnimate = True
     
     def runningTrain(self) -> None:
         self.canvas.move(self.background, self.bg_x, self.bg_y)
@@ -797,7 +796,7 @@ class Player():
         self.playerIdle()
         print(self.can.coords(self.img_j))
 
-    def movement(self, x, y) -> None:
+    def movement(self, x:int, y:int) -> None:
         self.can.move(self.img_j, x, y)
         self.pl_x = x
         self.pl_y = y
@@ -829,12 +828,11 @@ class Player():
         index += 1
         if index == 10: index = 1
 
-        if canAnimate:
-            if state == str(playerState[0]):
-                self.can.after(100, self.playerIdle, item, index)
-            elif state == str(playerState[1]):
-                self.can.delete(item)
-                self.playerWalk()
+        if state == str(playerState[0]):
+            self.can.after(100, self.playerIdle, item, index)
+        elif state == str(playerState[1]):
+            self.can.delete(item)
+            self.playerWalk()
     
     def playerWalk(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
@@ -848,12 +846,36 @@ class Player():
         index += 1
         if index == 10: index = 1
         
-        if canAnimate:
-            if state == str(playerState[1]):
-                self.can.after(100, self.playerWalk, item, index)
-            elif state == str(playerState[0]):
-                self.can.delete(item)
-                self.playerIdle()
+        if state == str(playerState[1]):
+            self.can.after(100, self.playerWalk, item, index)
+        elif state == str(playerState[0]):
+            self.can.delete(item)
+            self.playerIdle()
+
+    def playerMoveRight(self, event, index:int = 0) -> None:
+        global state, playerPosX
+        # print(event.keysym)
+        self.dirct = 1
+        state = str(playerState[1])
+        index += 1
+        if index <= 25:
+            playerPosX += 10
+            self.movement(playerPosX, playerPosY)
+            self.can.after(800, self.playerMoveRight, event, index)
+        if index == 25: 
+            print(self.can.coords(self.img_j))
+
+
+    def playerMoveLeft(self, event, index:int = 0) -> None:
+        global state, playerPosX
+        # print(event.keysym)
+        self.dirct = 0
+        state = str(playerState[1])
+        index += 1
+        if index <= 8:
+            playerPosX -= 10
+            self.movement(playerPosX, playerPosY)
+            self.can.after(800, self.playerMoveLeft, event, index)
 
 
 class ActionBtn(Button):
@@ -903,7 +925,7 @@ class Clouds():
         self.vitesse = randint(-25,-10)
         self.goodItems = [path_cloud_bg, path_cloud_2_bg, path_cloud_3_bg]
         # create falling items
-        self.itemPhoto = ImageTk.PhotoImage(Image.open(f"{choice(self.goodItems)}").resize((randint(120, 140), randint(84, 92))))
+        self.itemPhoto = ImageTk.PhotoImage(Image.open(f"{choice(self.goodItems)}").resize((randint(130, 150), randint(84, 92))))
         self.fallItem = self.canvas.create_image( (self.xPosition ,self.yPosition),
             image=self.itemPhoto , tag="good")
         # trigger falling item movement
