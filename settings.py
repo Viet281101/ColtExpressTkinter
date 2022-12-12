@@ -24,6 +24,21 @@ carSizeY : int = 85
 fullSizeX : int = 148
 showFull : bool = False
 canSeek : bool = False
+pos_4_wagon_1_door_1 : int = 24
+pos_4_wagon_1_door_2 : int = 272
+pos_4_wagon_2_door_1 : int = 324
+pos_4_wagon_2_door_2 : int = 570
+pos_4_wagon_3_door_1 : int = 624
+pos_4_wagon_3_door_2 : int = 870
+pos_4_wagon_4_door_1 : int = 920
+pos_4_wagon_4_door_2 : int = 1166
+
+pos_3_wagon_1_door_1 : int = 30
+pos_3_wagon_1_door_2 : int = 360
+pos_3_wagon_2_door_1 : int = 430
+pos_3_wagon_2_door_2 : int = 760
+pos_3_wagon_3_door_1 : int = 832
+pos_3_wagon_3_door_2 : int = 1164
 
 #### set volume
 volume : float = 0.0
@@ -33,7 +48,10 @@ unmute : bool = True
 #### player states:
 playerState : list = ['idle', 'walk', 'shoot', 'die']
 state : str = str(playerState[0])
+playerMove : bool = False
 outsideTrain : bool = False
+canGoUp : bool = True
+atWagon : int = 1
 playerPosX : int = 80
 playerPosY : int = 533
 playerSizeX : int = 32
@@ -83,7 +101,11 @@ path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
 path_thief_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft/Idle_"
 path_thief_WalkRight : str = "./assets/Images/Caracters/Thief/WalkRight/Walk_"
 path_thief_WalkLeft : str = "./assets/Images/Caracters/Thief/WalkLeft/Walk_"
-
+path_thief_AttackRight : str = "./assets/Images/Caracters/Thief/AttackRight/Attack_"
+path_thief_AttackLeft : str = "./assets/Images/Caracters/Thief/AttackLeft/Attack_"
+path_thief_DieRight : str = "./assets/Images/Caracters/Thief/DieRight/Die_"
+path_thief_DieLeft : str = "./assets/Images/Caracters/Thief/DieLeft/Die_"
+### link url website:
 url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 
 

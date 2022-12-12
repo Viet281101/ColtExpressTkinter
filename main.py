@@ -231,8 +231,12 @@ class Game(tk.Frame):
         self.minusBtn.place(x = 1125, y = 5)
         self.loadgameData()
 
+        ### test key move:
         self.canvas.bind('<KeyPress-Left>', lambda e: self.player.playerMoveLeft(e))
         self.canvas.bind('<KeyPress-Right>', lambda e: self.player.playerMoveRight(e))
+        self.canvas.bind('<KeyPress-Up>', lambda e: self.player.playerMoveUp(e))
+        self.canvas.bind('<KeyPress-Down>', lambda e: self.player.playerMoveDown(e))
+        self.canvas.bind('<x>', lambda e: self.player.playerStop(e))
 
     def changeIconSeek(self) -> None:
         if self.nolookBtn.image == self.canlookImg and not canSeek:
@@ -835,12 +839,19 @@ class Player():
             self.playerWalk()
     
     def playerWalk(self, item = None, index:int = 1) -> None:
+        global playerPosX
         self.can.delete(item)
 
         if self.dirct == 1:
             playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            if playerMove:
+                playerPosX += 2
+                self.movement(playerPosX, playerPosY)
         else:
             playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            if playerMove:
+                playerPosX -= 2
+                self.movement(playerPosX, playerPosY)
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
         self.img_j = item
         index += 1
@@ -852,31 +863,34 @@ class Player():
             self.can.delete(item)
             self.playerIdle()
 
-    def playerMoveRight(self, event, index:int = 0) -> None:
-        global state, playerPosX
-        # print(event.keysym)
+    def playerMoveRight(self, event) -> None:
+        global state, playerMove
+        print(event.keysym)
         self.dirct = 1
         state = str(playerState[1])
-        index += 1
-        if index <= 25:
-            playerPosX += 10
-            self.movement(playerPosX, playerPosY)
-            self.can.after(800, self.playerMoveRight, event, index)
-        if index == 25: 
-            print(self.can.coords(self.img_j))
+        playerMove = True
 
-
-    def playerMoveLeft(self, event, index:int = 0) -> None:
-        global state, playerPosX
-        # print(event.keysym)
+    def playerMoveLeft(self, event) -> None:
+        global state, playerMove
+        print(event.keysym)
         self.dirct = 0
         state = str(playerState[1])
-        index += 1
-        if index <= 8:
-            playerPosX -= 10
-            self.movement(playerPosX, playerPosY)
-            self.can.after(800, self.playerMoveLeft, event, index)
+        playerMove = True
 
+    def playerMoveUp(self, event) -> None:
+        global canGoUp, playerPosY
+        print(event.keysym)
+
+    def playerMoveDown(self, event) -> None:
+        global canGoUp, playerPosY
+        print(event.keysym)
+    
+    def playerStop(self, event) -> None:
+        global playerMove, state
+        print(event.keysym)
+        state = str(playerState[0])
+        print(self.can.coords(self.img_j))
+        playerMove = False
 
 class ActionBtn(Button):
     def __init__(self, window : Tk, player, target, direction, imgBtn):
