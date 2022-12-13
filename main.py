@@ -36,6 +36,7 @@ class Window(tk.Tk):
 class MenuStartWindow(tk.Frame):
     def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
+        self.tkraise()
         stopCreditMusic()
         self.background()
         self.buttonGame(master)
@@ -232,11 +233,11 @@ class Game(tk.Frame):
         self.loadgameData()
 
         ### test key move:
-        self.canvas.bind('<KeyPress-Left>', lambda e: self.player.playerMoveLeft(e))
-        self.canvas.bind('<KeyPress-Right>', lambda e: self.player.playerMoveRight(e))
-        self.canvas.bind('<KeyPress-Up>', lambda e: self.player.playerMoveUp(e))
-        self.canvas.bind('<KeyPress-Down>', lambda e: self.player.playerMoveDown(e))
-        self.canvas.bind('<x>', lambda e: self.player.playerStop(e))
+        self.canvas.bind('<KeyPress-Left>', lambda e: self.player.testMoveLeftKey(e))
+        self.canvas.bind('<KeyPress-Right>', lambda e: self.player.testMoveRightKey(e))
+        self.canvas.bind('<KeyPress-Up>', lambda e: self.player.testMoveUpKey(e))
+        self.canvas.bind('<KeyPress-Down>', lambda e: self.player.testMoveDownKey(e))
+        self.canvas.bind('<x>', lambda e: self.player.testStopKey(e))
 
     def changeIconSeek(self) -> None:
         if self.nolookBtn.image == self.canlookImg and not canSeek:
@@ -794,7 +795,7 @@ class Player():
         self.pl_x = pl_x
         self.pl_y = pl_y
 
-        self.position = position
+        self.position_wagon = position
         self.position_y = 1
         self.dirct = 1
         self.playerIdle()
@@ -830,13 +831,19 @@ class Player():
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
         self.img_j =  item
         index += 1
-        if index == 10: index = 1
+        if index == 11: index = 1
 
         if state == str(playerState[0]):
             self.can.after(100, self.playerIdle, item, index)
         elif state == str(playerState[1]):
             self.can.delete(item)
             self.playerWalk()
+        elif state == str(playerState[2]):
+            self.can.delete(item)
+            self.playerAttack()
+        elif state == str(playerState[3]):
+            self.can.delete(item)
+            self.playerDie()
     
     def playerWalk(self, item = None, index:int = 1) -> None:
         global playerPosX
@@ -855,24 +862,67 @@ class Player():
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
         self.img_j = item
         index += 1
-        if index == 10: index = 1
+        if index == 11: index = 1
         
         if state == str(playerState[1]):
             self.can.after(100, self.playerWalk, item, index)
         elif state == str(playerState[0]):
             self.can.delete(item)
             self.playerIdle()
+        elif state == str(playerState[2]):
+            self.can.delete(item)
+            self.playerAttack()
+        elif state == str(playerState[3]):
+            self.can.delete(item)
+            self.playerDie()
+    
+    def playerAttack(self, item = None, index:int = 1) -> None:
+        self.can.delete(item)
 
-    def playerMoveRight(self, event) -> None:
+        if self.dirct == 1:
+            playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+        else:
+            playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgAttack)
+        self.img_j =  item
+        index += 1
+        if index == 11: index = 1
+
+        if state == str(playerState[2]):
+            self.can.after(100, self.playerAttack, item, index)
+        elif state == str(playerState[0]):
+            self.can.delete(item)
+            self.playerIdle()
+        elif state == str(playerState[1]):
+            self.can.delete(item)
+            self.playerWalk()
+        elif state == str(playerState[3]):
+            self.can.delete(item)
+            self.playerDie()
+    
+    def playerDie(self, item = None, index:int = 1) -> None:
+        global gameOver
+        self.can.delete(item)
+
+        if self.dirct == 1:
+            playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+        else:
+            playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgDie)
+        self.img_j =  item
+        index += 1
+        if state == str(playerState[3]) and index <= 11:
+            self.can.after(100, self.playerDie, item, index)
+        if index == 11: gameOver = True
+
+    def playerMoveRight(self) -> None:
         global state, playerMove
-        print(event.keysym)
         self.dirct = 1
         state = str(playerState[1])
         playerMove = True
 
-    def playerMoveLeft(self, event) -> None:
+    def playerMoveLeft(self) -> None:
         global state, playerMove
-        print(event.keysym)
         self.dirct = 0
         state = str(playerState[1])
         playerMove = True
@@ -880,17 +930,38 @@ class Player():
     def playerMoveUp(self, event) -> None:
         global canGoUp, playerPosY
         print(event.keysym)
+        self.position_y += 1
 
     def playerMoveDown(self, event) -> None:
         global canGoUp, playerPosY
         print(event.keysym)
+        self.position_y -= 1
     
-    def playerStop(self, event) -> None:
+    def playerStop(self) -> None:
         global playerMove, state
-        print(event.keysym)
         state = str(playerState[0])
         print(self.can.coords(self.img_j))
         playerMove = False
+
+    def testMoveRightKey(self, event) -> None:
+        print(event.keysym)
+        self.playerMoveRight()
+    
+    def testMoveLeftKey(self, event) -> None:
+        print(event.keysym)
+        self.playerMoveLeft()
+    
+    def testMoveUpKey(self, event) -> None:
+        print(event.keysym)
+        self.playerMoveUp
+    
+    def testMoveDownKey(self, event) -> None:
+        print(event.keysym)
+        self.playerMoveDown
+    
+    def testStopKey(self, event) -> None:
+        print(event.keysym)
+        self.playerStop()
 
 class ActionBtn(Button):
     def __init__(self, window : Tk, player, target, direction, imgBtn):

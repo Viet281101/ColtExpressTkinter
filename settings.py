@@ -13,6 +13,7 @@ NB_BALLES : int = 6
 
 ############ GAME DATA (for save and load): ############
 saveGame : bool = False
+gameOver : bool = False
 
 ### for fixing value:
 nb_wagons : int = 3
@@ -46,7 +47,7 @@ volume_sound : float = 0.5
 unmute : bool = True
 
 #### player states:
-playerState : list = ['idle', 'walk', 'shoot', 'die']
+playerState : list = ['idle', 'walk', 'attack', 'die']
 state : str = str(playerState[0])
 playerMove : bool = False
 outsideTrain : bool = False
