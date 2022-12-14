@@ -209,6 +209,17 @@ class Game(tk.Frame):
         self.returnBtn.place(x = 0, y = 0)
         self.loadTextLang()
 
+        ### pause game button:
+        self.pauseImg = ImageTk.PhotoImage(Image.open(path_pause_icon).resize((30, 30)))
+        self.unpauseImg = ImageTk.PhotoImage(Image.open(path_unpause_icon).resize((30, 30)))
+
+        self.unpauseBtn = tk.Button(self.canvas, image = self.pauseImg, 
+            relief = FLAT, command = self.pauseGame, width=30,
+            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
+            activebackground=TEXT_BLACK)
+        self.unpauseBtn.image = self.pauseImg
+        self.unpauseBtn.place(x = 1160, y = 0)
+
         ### view inside train button:
         self.canlookImg = ImageTk.PhotoImage(Image.open(path_eye_can_look).resize((30, 30)))
         self.nolookImg = ImageTk.PhotoImage(Image.open(path_eye_can_not_look).resize((30, 30)))
@@ -218,7 +229,7 @@ class Game(tk.Frame):
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK)
         self.nolookBtn.image = self.canlookImg
-        self.nolookBtn.place(x = 1160, y = 0)
+        self.nolookBtn.place(x = 1125, y = 0)
 
         ### button set number wagon
         self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((20, 20)))
@@ -229,7 +240,7 @@ class Game(tk.Frame):
             highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
             activebackground=TEXT_BLACK)
         self.minusBtn.image = self.plusImg
-        self.minusBtn.place(x = 1125, y = 5)
+        self.minusBtn.place(x = 1090, y = 5)
         self.loadgameData()
 
         ### test key move:
@@ -240,14 +251,18 @@ class Game(tk.Frame):
         self.canvas.bind('<x>', lambda e: self.player.testStopKey(e))
 
     def changeIconSeek(self) -> None:
-        if self.nolookBtn.image == self.canlookImg and not canSeek:
-            self.nolookBtn.config(image=self.nolookImg)
-            self.nolookBtn.image = self.nolookImg
-            self.showWagon()
-        elif self.nolookBtn.image == self.nolookImg and canSeek:
-            self.nolookBtn.config(image=self.canlookImg)
-            self.nolookBtn.image = self.canlookImg
-            self.hideWagon()
+        if not playerMove:
+            if self.nolookBtn.image == self.canlookImg and not canSeek:
+                self.nolookBtn.config(image=self.nolookImg)
+                self.nolookBtn.image = self.nolookImg
+                self.showWagon()
+            elif self.nolookBtn.image == self.nolookImg and canSeek:
+                self.nolookBtn.config(image=self.canlookImg)
+                self.nolookBtn.image = self.canlookImg
+                self.hideWagon()
+    
+    def pauseGame(self) -> None:
+        pass
     
     def setNbrWagon(self) -> None:
         global nb_wagons, canPlusWG
@@ -280,6 +295,7 @@ class Game(tk.Frame):
             self.carriagePosX = self.fullWagonPosX = fullSizeX
             self.carriagePosY = self.fullWagonPosY = 532
             if not outsideTrain: playerPosY += 14
+            else: playerPosY += 40
             playerPosX -= 30
             playerSizeX = playerSizeY = 32
         elif nb_wagons == 3:
@@ -287,7 +303,8 @@ class Game(tk.Frame):
             self.carriagePosX = self.fullWagonPosX = fullSizeX
             self.carriagePosY = self.fullWagonPosY = 518
             if not outsideTrain: playerPosY -= 14
-            playerPosX +=30
+            else: playerPosY -= 40
+            playerPosX += 30
             playerSizeX = playerSizeY = 48
         self.showTrainCarriages()
         self.player.movement(playerPosX, playerPosY)
@@ -863,6 +880,8 @@ class Player():
         self.img_j = item
         index += 1
         if index == 11: index = 1
+        self.touchDoors()
+        self.stopAtPointsAfterMove()
         
         if state == str(playerState[1]):
             self.can.after(100, self.playerWalk, item, index)
@@ -886,7 +905,7 @@ class Player():
         item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgAttack)
         self.img_j =  item
         index += 1
-        if index == 11: index = 1
+        if index == 11: self.playerStop
 
         if state == str(playerState[2]):
             self.can.after(100, self.playerAttack, item, index)
@@ -927,21 +946,68 @@ class Player():
         state = str(playerState[1])
         playerMove = True
 
-    def playerMoveUp(self, event) -> None:
-        global canGoUp, playerPosY
-        print(event.keysym)
-        self.position_y += 1
+    def playerMoveUp(self) -> None:
+        global goUp, goDown, playerPosY
+        self.playerMoveLeft()
+        goUp = True; goDown = False
 
-    def playerMoveDown(self, event) -> None:
-        global canGoUp, playerPosY
-        print(event.keysym)
-        self.position_y -= 1
+    def playerMoveDown(self) -> None:
+        global goUp, goDown, playerPosY
+        self.playerMoveLeft()
+        goDown = True; goUp = False
     
     def playerStop(self) -> None:
         global playerMove, state
         state = str(playerState[0])
         print(self.can.coords(self.img_j))
         playerMove = False
+
+    def touchDoors(self) -> None:
+        global playerPosX, playerPosY, goDown, goUp, outsideTrain, stopAfterMove
+        self.doors : list = []
+        if nb_wagons == 3: self.doors.clear(); self.doors += door_pos_3_wagon
+        elif nb_wagons == 4: self.doors.clear(); self.doors += door_pos_4_wagon
+        if playerPosX in self.doors:
+            if not goUp and not goDown:
+                if playerPosX == int(self.doors[0]) or playerPosX == int(self.doors[-1]): self.playerStop()
+                else:
+                    if nb_wagons == 3:
+                        if self.dirct == 1: playerPosX += 70; self.position_wagon += 1
+                        else: playerPosX -= 70; self.position_wagon -= 1
+                        self.movement(playerPosX, playerPosY)
+                        stopAfterMove = True
+                    elif nb_wagons == 4:
+                        if self.dirct == 1: playerPosX += 52; self.position_wagon += 1
+                        else: playerPosX -= 52; self.position_wagon -= 1
+                        self.movement(playerPosX, playerPosY)
+                        stopAfterMove = True
+            elif goUp and not goDown and self.position_y == 1: 
+                if nb_wagons == 3: playerPosY -= 80
+                elif nb_wagons == 4: playerPosY -= 54
+                self.movement(playerPosX, playerPosY)
+                self.playerMoveRight()
+                self.position_y += 1
+                stopAfterMove = True
+                goDown = True; goUp = False; outsideTrain = True
+            elif not goUp and goDown and self.position_y > 1:
+                if nb_wagons == 3: playerPosY += 80
+                elif nb_wagons == 4: playerPosY += 54
+                self.movement(playerPosX, playerPosY)
+                self.playerMoveRight()
+                self.position_y -=1
+                stopAfterMove = True
+                goDown = False; goUp = False; outsideTrain = False
+            else: self.playerStop()
+    
+    def stopAtPointsAfterMove(self) -> None:
+        global stopAfterMove
+        self.stopPonits : list = []
+        if nb_wagons == 3: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg3
+        elif nb_wagons == 4: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg4
+        if stopAfterMove:
+            if playerPosX in self.stopPonits:
+                self.playerStop()
+                stopAfterMove = False
 
     def testMoveRightKey(self, event) -> None:
         print(event.keysym)
@@ -953,11 +1019,11 @@ class Player():
     
     def testMoveUpKey(self, event) -> None:
         print(event.keysym)
-        self.playerMoveUp
+        self.playerMoveUp()
     
     def testMoveDownKey(self, event) -> None:
         print(event.keysym)
-        self.playerMoveDown
+        self.playerMoveDown()
     
     def testStopKey(self, event) -> None:
         print(event.keysym)

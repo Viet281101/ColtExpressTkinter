@@ -28,18 +28,38 @@ canSeek : bool = False
 pos_4_wagon_1_door_1 : int = 24
 pos_4_wagon_1_door_2 : int = 272
 pos_4_wagon_2_door_1 : int = 324
-pos_4_wagon_2_door_2 : int = 570
+pos_4_wagon_2_door_2 : int = 572
 pos_4_wagon_3_door_1 : int = 624
-pos_4_wagon_3_door_2 : int = 870
-pos_4_wagon_4_door_1 : int = 920
+pos_4_wagon_3_door_2 : int = 872
+pos_4_wagon_4_door_1 : int = 924
 pos_4_wagon_4_door_2 : int = 1166
+
+door_pos_4_wagon :list = [
+        pos_4_wagon_1_door_1,
+        pos_4_wagon_1_door_2,
+        pos_4_wagon_2_door_1,
+        pos_4_wagon_2_door_2,
+        pos_4_wagon_3_door_1,
+        pos_4_wagon_3_door_2,
+        pos_4_wagon_4_door_1,
+        pos_4_wagon_4_door_2,
+]
 
 pos_3_wagon_1_door_1 : int = 30
 pos_3_wagon_1_door_2 : int = 360
 pos_3_wagon_2_door_1 : int = 430
 pos_3_wagon_2_door_2 : int = 760
-pos_3_wagon_3_door_1 : int = 832
+pos_3_wagon_3_door_1 : int = 830
 pos_3_wagon_3_door_2 : int = 1164
+
+door_pos_3_wagon :list = [
+        pos_3_wagon_1_door_1,
+        pos_3_wagon_1_door_2,
+        pos_3_wagon_2_door_1,
+        pos_3_wagon_2_door_2,
+        pos_3_wagon_3_door_1,
+        pos_3_wagon_3_door_2,
+]
 
 #### set volume
 volume : float = 0.0
@@ -51,13 +71,17 @@ playerState : list = ['idle', 'walk', 'attack', 'die']
 state : str = str(playerState[0])
 playerMove : bool = False
 outsideTrain : bool = False
-canGoUp : bool = True
+goUp : bool = False
+goDown : bool = False
 atWagon : int = 1
 playerPosX : int = 80
 playerPosY : int = 533
 playerSizeX : int = 32
 playerSizeY : int = 32
 
+stopAfterMove : bool = False
+stopPointActions_wg3 : list = [110, 310, 510, 710, 910, 1100]
+stopPointActions_wg4 : list = [80, 230, 380, 530, 680, 830, 980, 1130]
 
 #### set language:
 listCBLangEN : tuple = ('English', 'French', 'Vietnamese')
@@ -85,6 +109,8 @@ path_vol_icon_play : str = "./assets/Images/volume-icon-play.png"
 path_vol_icon_pause : str = "./assets/Images/volume-icon-pause.png"
 path_plus_icon : str = "./assets/Images/plus-icon.png"
 path_minus_icon : str = "./assets/Images/minus-icon.png"
+path_pause_icon : str = "./assets/Images/pause-icon.png"
+path_unpause_icon : str = "./assets/Images/unpause-icon.png"
 path_eye_can_look : str = "./assets/Images/eye_can_look.png"
 path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
@@ -113,6 +139,7 @@ url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 ######## LANGUE TEXT SETTING ###########
 english_text : dict = {
     'play' : "Play",
+    'start' : "Start",
     'rule' : "Rules",
     'setting' : "Setting",
     'language' : "Language",
@@ -134,6 +161,7 @@ english_text : dict = {
 
 francais_texte : dict = {
     'play' : "Jouer",
+    'start' : "Partir",
     'rule' : "Règle",
     'setting' : "Paramètre",
     'language' : "Langue",
@@ -155,6 +183,7 @@ francais_texte : dict = {
 
 vietnamese_text : dict = {
     'play' : "Chơi",
+    'start' : "Bắt đầu",
     'rule' : "Quy tắc",
     'setting' : "Cài đặt",
     'language' : "Ngôn ngữ",
