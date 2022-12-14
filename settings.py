@@ -14,6 +14,8 @@ NB_BALLES : int = 6
 ############ GAME DATA (for save and load): ############
 saveGame : bool = False
 gameOver : bool = False
+startTheGame : bool = False
+startPlanning : bool = False
 
 ### for fixing value:
 nb_wagons : int = 3
@@ -92,8 +94,11 @@ setLang : int = 0 ### set english as language default
 
 
 ######## DATA COLOR #############
-TEXT_PURPLE : str = '#0a0403'
-TEXT_BLACK : str = '#603c60'
+TEXT_BLACK : str = '#0a0403'
+TEXT_PURPLE : str = '#603c60'
+
+bg_color : str = TEXT_BLACK
+text_color : str = 'purple'
 
 ######## FONT TYPE ##############
 FONT_HELV : list = ("Helvetica", 15, "bold")
@@ -146,6 +151,11 @@ english_text : dict = {
     'music' : "Music",
     'sound' : "Sound",
     'volume' : "the volume",
+    'color' : "Color",
+    'text' : "Text",
+    'change' : "Change",
+    'planning' : "Planning",
+    'action' : "Action",
     'apply' : "Apply",
     'credit' : "Credit",
     'exit' : "Exit",
@@ -168,6 +178,11 @@ francais_texte : dict = {
     'music' : "Musique",
     'sound' : "Son",
     'volume' : "le volume",
+    'color' : "Couleur",
+    'text' : "Texte",
+    'change' : "Changer",
+    'planning' : "Planification",
+    'action' : "Action",
     'apply' : "Applique",
     'credit' : "Crédit",
     'exit' : "Sortir",
@@ -191,6 +206,11 @@ vietnamese_text : dict = {
     'sound' : "Âm thanh",
     'volume' : "âm lượng",
     'apply' : "Áp dụng",
+    'color' : "Màu Sắc",
+    'text' : "Chữ",
+    'change' : "Thay đổi",
+    'planning' : "Lập kế hoạch",
+    'action' : "Hành động",
     'credit' : "Dự án",
     'exit' : "Thoát",
     'quit' : "Thoát",

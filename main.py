@@ -5,6 +5,7 @@ import tkinter as tk
 from itertools import count, cycle
 from tkinter import *
 from tkinter import messagebox, ttk
+from tkinter.colorchooser import askcolor
 from PIL import Image, ImageTk
 from settings import *
 from random import *
@@ -50,37 +51,37 @@ class MenuStartWindow(tk.Frame):
         if unmute: trainSound()
     
     def buttonGame(self, master) -> None:
-        frameBtn = tk.Frame(self,width = 170, height = 576, bg=TEXT_PURPLE)
+        frameBtn = tk.Frame(self,width = 170, height = 576, bg=bg_color)
         frameBtn.grid(row = 0, column = 1)
 
-        self.btn_start = tk.Button(frameBtn, fg = 'purple', 
+        self.btn_start = tk.Button(frameBtn, fg = text_color, 
             font=FONT_HELV, command = lambda: self.startGame(master), 
-            width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            width= 10, highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.btn_start.place(x = 18 , y=150)
 
-        self.btn_ruler = tk.Button(frameBtn, fg = 'purple', 
+        self.btn_ruler = tk.Button(frameBtn, fg = text_color, 
             font=FONT_HELV, command = lambda: master.switch_frame(Rule), 
-            width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            width= 10, highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.btn_ruler.place(x = 18 , y=200)
 
-        self.btn_setting = tk.Button(frameBtn, fg = 'purple', 
+        self.btn_setting = tk.Button(frameBtn, fg = text_color, 
             font=FONT_HELV, command = lambda: master.switch_frame(Setting), 
-            width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            width= 10, highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.btn_setting.place(x = 18 , y=250)
         
-        self.btn_credit = tk.Button(frameBtn, fg = 'purple', 
+        self.btn_credit = tk.Button(frameBtn, fg = text_color, 
             font=FONT_HELV, command = lambda: master.switch_frame(Credit), 
-            width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            width= 10, highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.btn_credit.place(x = 18 , y=300)
 
-        self.btn_quit = tk.Button(frameBtn, fg = 'purple', 
+        self.btn_quit = tk.Button(frameBtn, fg = text_color, 
             font=FONT_HELV, command = self.confirmBox, 
-            width= 10, highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            width= 10, highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.btn_quit.place(x = 18 , y=350)
 
         self.loadTextLang()
@@ -192,7 +193,6 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         self.runningTrain()
         
-
         ##### Set background
         self.trainPath = path_train_car
         self.createClouds()
@@ -202,12 +202,19 @@ class Game(tk.Frame):
 
         ### button return to the menu:
         self.returnBtn = tk.Button(self.canvas, text="",
-            fg = 'purple', font=FONT_HELV,
+            fg = text_color, font=FONT_HELV,
             command = lambda: master.switch_frame(MenuStartWindow),
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
-        self.loadTextLang()
+
+        ### start to play:
+        self.startBtn = tk.Button(self.canvas, text="",
+            fg = text_color, font=FONT_HELV,
+            command = self.startGamePlay,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.startBtn.place(x = 200, y = 0)
 
         ### pause game button:
         self.pauseImg = ImageTk.PhotoImage(Image.open(path_pause_icon).resize((30, 30)))
@@ -215,8 +222,8 @@ class Game(tk.Frame):
 
         self.unpauseBtn = tk.Button(self.canvas, image = self.pauseImg, 
             relief = FLAT, command = self.pauseGame, width=30,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.unpauseBtn.image = self.pauseImg
         self.unpauseBtn.place(x = 1160, y = 0)
 
@@ -226,8 +233,8 @@ class Game(tk.Frame):
 
         self.nolookBtn = tk.Button(self.canvas, image = self.canlookImg, 
             relief = FLAT, command = self.changeIconSeek, width=30,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.nolookBtn.image = self.canlookImg
         self.nolookBtn.place(x = 1125, y = 0)
 
@@ -237,11 +244,12 @@ class Game(tk.Frame):
 
         self.minusBtn = tk.Button(self.canvas, image = self.plusImg, 
             relief = FLAT, command = self.setNbrWagon, width=30,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.minusBtn.image = self.plusImg
         self.minusBtn.place(x = 1090, y = 5)
         self.loadgameData()
+        self.loadTextLang()
 
         ### test key move:
         self.canvas.bind('<KeyPress-Left>', lambda e: self.player.testMoveLeftKey(e))
@@ -263,6 +271,16 @@ class Game(tk.Frame):
     
     def pauseGame(self) -> None:
         pass
+
+    def startGamePlay(self) -> None:
+        global startTheGame
+        if not startTheGame and not startPlanning:
+            startTheGame = True
+            self.loadTextLang()
+            self.minusBtn.destroy()
+        elif startTheGame and not startPlanning:
+            self.loadTextLang()
+            self.planning = PlanningWindow(self)
     
     def setNbrWagon(self) -> None:
         global nb_wagons, canPlusWG
@@ -326,12 +344,27 @@ class Game(tk.Frame):
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
+            if not startTheGame and not startPlanning:
+                self.startBtn.config(text=english_text['start'].upper())
+            elif startTheGame and not startPlanning:
+                self.startBtn.config(text=english_text['planning'] + " " + english_text['action'])
+            else: self.startBtn.config(text=english_text['action'].upper())
 
         elif setLang == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
+            if not startTheGame and not startPlanning:
+                self.startBtn.config(text=francais_texte['start'].upper())
+            elif startTheGame and not startPlanning:
+                self.startBtn.config(text=francais_texte['planning'] + " " + francais_texte['action'])
+            else: self.startBtn.config(text=francais_texte['action'].upper())
         
         elif setLang == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
+            if not startTheGame and not startPlanning:
+                self.startBtn.config(text=vietnamese_text['start'].upper())
+            elif startTheGame and not startPlanning:
+                self.startBtn.config(text=vietnamese_text['planning'] + " " + vietnamese_text['action'])
+            else: self.startBtn.config(text=vietnamese_text['action'].upper())
     
     def setDefaultTrain(self) -> None:
         global carSizeX, carSizeY, fullSizeX
@@ -398,7 +431,19 @@ class Game(tk.Frame):
             self.showWagon()
         self.changeIconMinus()
 
-        
+class PlanningWindow(Toplevel):
+    def __init__(self, master = None):
+        super().__init__(master=master)
+        self.title("Planning the Actions")
+        self.geometry('1194x400')
+        self.resizable(False, False)
+        self.wm_attributes("-topmost", 2)
+        self['bg'] = 'black'
+    
+    def confirmActions(self) -> None:
+        global startPlanning
+        startPlanning = True
+
 class Rule(tk.Frame):
     def __init__(self, master) -> None:
         tk.Frame.__init__(self, master)
@@ -416,10 +461,10 @@ class Rule(tk.Frame):
 
         #### return to the start menu button:
         self.returnBtn = tk.Button(self.canvas, text="",
-            fg = 'purple', font=FONT_HELV,
+            fg = text_color, font=FONT_HELV,
             command = lambda: master.switch_frame(MenuStartWindow),
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
 
         self.loadTextLang()
@@ -467,7 +512,7 @@ class Credit(tk.Frame):
         self.nbrScroll:int = 2
         self.creditTxt = self.textCreditCV.create_text(0, 0, 
             anchor=NW, justify='center', 
-            fill='purple', text=credits_text_eng, 
+            fill=text_color, text=credits_text_eng, 
             font=FONT_HELV)
 
 
@@ -476,8 +521,8 @@ class Credit(tk.Frame):
         self.arrowUpImg = ImageTk.PhotoImage(self.arrowUpImg)
         self.arrowUpBtn = Button(self.canvas, image=self.arrowUpImg, 
             command = self.scrollUp, 
-            bd = 0, bg = TEXT_PURPLE,
-            activebackground=TEXT_BLACK, cursor='target',
+            bd = 0, bg = bg_color,
+            activebackground=TEXT_PURPLE, cursor='target',
             borderwidth=0, highlightthickness=0)
         self.arrowUpBtn.image = self.arrowUpImg
 
@@ -487,8 +532,8 @@ class Credit(tk.Frame):
         self.arrowDownImg = ImageTk.PhotoImage(self.arrowDownImg)
         self.arrowDownBtn = Button(self.canvas, image=self.arrowDownImg, 
             command = self.scrollDown, 
-            bd = 0, bg = TEXT_PURPLE,
-            activebackground=TEXT_BLACK, cursor='target',
+            bd = 0, bg = bg_color,
+            activebackground=TEXT_PURPLE, cursor='target',
             borderwidth=0, highlightthickness=0)
         self.arrowDownBtn.image = self.arrowDownImg
 
@@ -498,18 +543,18 @@ class Credit(tk.Frame):
         self.githubImg = ImageTk.PhotoImage(self.githubImg)
         self.githubBtn = Button(self.canvas, image=self.githubImg, 
             command = self.openGitHub, 
-            bd = 0, bg = TEXT_PURPLE,
-            activebackground=TEXT_BLACK, cursor='target',
+            bd = 0, bg = bg_color,
+            activebackground=TEXT_PURPLE, cursor='target',
             borderwidth=0, highlightthickness=0)
         self.githubBtn.image = self.githubImg
         
         ### Return button:
         self.new = 1
         self.returnBtn = tk.Button(self.canvas, text="",
-            fg = 'purple', font=FONT_HELV,
+            fg = text_color, font=FONT_HELV,
             command = lambda: master.switch_frame(MenuStartWindow),
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.returnBtn.place(x = 0, y = 0)
 
         self.canvasMove()
@@ -559,7 +604,7 @@ class Setting(tk.Frame):
         stopTrainSound()
 
         ###### Title page
-        self.title = tk.Label(self, text="", fg = 'purple', 
+        self.title = tk.Label(self, text="", fg = text_color, 
             font=('Helvetica 59 underline'), width=8,
             bd = 0, bg ='black', relief=None)
         self.title.grid(row = 0, columnspan=2, sticky = W)
@@ -570,14 +615,14 @@ class Setting(tk.Frame):
 
         #### Language Setting
         self.langLbl = tk.Label(self, text="", 
-            fg = 'purple', font=FONT_HELV, width = 20,
+            fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
         self.langLbl.grid(row = 2, column = 0, sticky = W)
         
         self.Cbstyle = ttk.Style()
-        self.Cbstyle.map('TCombobox', fieldbackground=[('readonly','purple')])
-        self.Cbstyle.map('TCombobox', selectbackground=[('readonly', 'purple')])
+        self.Cbstyle.map('TCombobox', fieldbackground=[('readonly',text_color)])
+        self.Cbstyle.map('TCombobox', selectbackground=[('readonly', text_color)])
         self.Cbstyle.map('TCombobox', selectforeground=[('readonly', 'black')])
         
         self.langTxt = tk.StringVar()
@@ -590,7 +635,7 @@ class Setting(tk.Frame):
 
         ### Sound Setting
         self.soundLbl = tk.Label(self, text = "Sound \nMusic : ", 
-            fg = 'purple', font=FONT_HELV, width = 20,
+            fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
         self.soundLbl.grid(row = 3, column = 0, sticky = W)
@@ -598,15 +643,15 @@ class Setting(tk.Frame):
         ### Sound Scale
         self.scaleVar = tk.StringVar()
         self.scaleSound = tk.Scale(self, from_=0, to=100, orient=HORIZONTAL, 
-            troughcolor = 'purple', bg = 'black', bd = 0, 
-            fg = 'purple', font=FONT_HELV, width=15, length = 126,
-            highlightbackground = TEXT_PURPLE, 
+            troughcolor = text_color, bg = 'black', bd = 0, 
+            fg = text_color, font=FONT_HELV, width=15, length = 126,
+            highlightbackground = bg_color, 
             resolution=0.1, variable= self.scaleVar)
         self.scaleSound.grid(row = 3, column = 1, sticky = W)
 
         ### Mute and Unmute setting
-        self.muteLbl = tk.Label(self, text = "Sound : ", 
-            fg = 'purple', font=FONT_HELV, width = 20,
+        self.muteLbl = tk.Label(self, text = " - Sound : ", 
+            fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
         self.muteLbl.grid(row=4, column=0, sticky=W)
@@ -619,8 +664,8 @@ class Setting(tk.Frame):
 
         self.muteBtn = tk.Button(self.musicBtnZone, image = self.unmuteImg, 
             relief = FLAT, command = self.changeIcon, width=30,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.muteBtn.image = self.unmuteImg
         self.muteBtn.place(x = 47, y = 0)
 
@@ -628,51 +673,69 @@ class Setting(tk.Frame):
         self.minusImg = ImageTk.PhotoImage(Image.open(path_minus_icon).resize((23, 23)))
         self.decreaseScaleVar = tk.Button(self.musicBtnZone, image = self.minusImg, 
             width=30, relief = FLAT, command = self.decreaseSoundScale,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.decreaseScaleVar.image = self.minusImg
         self.decreaseScaleVar.place(x = 0, y = 0)
         
         self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((23, 23)))
         self.increaseScaleVar = tk.Button(self.musicBtnZone, image=self.plusImg, 
             width=30, relief = FLAT, command = self.increaseSoundScale,
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
         self.increaseScaleVar.image = self.minusImg
         self.increaseScaleVar.place(x = 93, y = 0)
         
         self.setDefaultVolumeScale()
 
+        ### Color text Setting
+        self.colorLbl = tk.Label(self, text= "", 
+            fg = text_color, font=FONT_HELV, width = 20,
+            bd = 0, bg ='black', relief=None, 
+            anchor=W, justify=LEFT)
+        self.colorLbl.grid(row = 5, column = 0, sticky = W)
+
+        self.colorBtn = tk.Button(self, text= "", width = 14,
+            fg = text_color, font=("Helvetica", 10, "bold"), command=self.colorSetting,
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE, height = 2,
+            borderwidth = 0)
+        self.colorBtn.grid(row = 5, column=1, sticky = W, padx=2)
+
         ### Space vertical
         self.lineLbl = tk.Label(self, width=44, height=5, 
             bd = 0, bg = 'black', relief=None)
-        self.lineLbl.grid(row=5, columnspan=2, sticky=W)
+        self.lineLbl.grid(row=6, columnspan=2, sticky=W)
 
         ### Buttons
         self.applyBtn = tk.Button(self, text=english_text['apply'], width = 18,
-            fg = 'purple', font=FONT_HELV,
+            fg = text_color, font=FONT_HELV,
             command = self.applyChange,
-            highlightbackground='#76428A', bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK)
-        self.applyBtn.grid(row = 6, column = 0, sticky=W)
+            highlightbackground='#76428A', bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
+        self.applyBtn.grid(row = 7, column = 0, sticky=W)
 
         self.returnBtn = tk.Button(self, text=english_text['return'], width = 9,
-            fg = 'purple', font=FONT_HELV,
+            fg = text_color, font=FONT_HELV,
             command = lambda: master.switch_frame(MenuStartWindow),
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, bd = 0, 
-            activebackground=TEXT_BLACK, 
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE, 
             borderwidth = 0)
-        self.returnBtn.grid(row = 6, column=1, sticky = W, padx=2)
+        self.returnBtn.grid(row = 7, column=1, sticky = W, padx=2)
 
         self.loadTextLang()
+        self.loadColorText()
     
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
-            self.title.config(text = english_text['setting'].upper() + ':')
-            self.langLbl.config(text= english_text['language'] + ' : ')
+            self.title.config(text=english_text['setting'].upper() + ':')
+            self.langLbl.config(text= " - " + english_text['language'] + ' : ')
+            self.muteLbl.config(text= " - " + english_text['sound'] + ' : ')
             self.soundLbl.config(
-                text=f"{english_text['setting']} \n{english_text['volume']} : "
+                text=f" - {english_text['setting']} \n\t{english_text['volume']} : "
             )
+            self.colorLbl.config(text = "\n - " + english_text['color'] + " " + english_text['text'].lower() + " : ")
+            self.colorBtn.config(text = english_text['change'] + " " + english_text['color'])
             self.applyBtn.config(text=english_text['apply'])
             self.returnBtn.config(text=english_text['return'])
             self.langBox.delete(0,'end')
@@ -680,10 +743,13 @@ class Setting(tk.Frame):
         
         elif setLang == int(langList[1]):
             self.title.config(text = francais_texte['setting'])
-            self.langLbl.config(text= francais_texte['language'] + ' : ')
+            self.langLbl.config(text= " - " + francais_texte['language'] + ' : ')
+            self.muteLbl.config(text= " - " + francais_texte['sound'] + ' : ')
             self.soundLbl.config(
-                text=f"{francais_texte['setting']} \n{francais_texte['volume']} : "
+                text=f" - {francais_texte['setting']} \n\t{francais_texte['volume']} : "
             )
+            self.colorLbl.config(text = "\n - " + francais_texte['color'] + " " + francais_texte['text'].lower() + " : ")
+            self.colorBtn.config(text = francais_texte['change'] + " " + francais_texte['color'])
             self.applyBtn.config(text=francais_texte['apply'])
             self.returnBtn.config(text=francais_texte['return'])
             self.langBox.delete(0,'end')
@@ -691,14 +757,27 @@ class Setting(tk.Frame):
         
         elif setLang == int(langList[2]):
             self.title.config(text = vietnamese_text['setting'] + ':')
-            self.langLbl.config(text= vietnamese_text['language'] + ' : ')
+            self.langLbl.config(text= " - " + vietnamese_text['language'] + ' : ')
+            self.muteLbl.config(text= " - " + vietnamese_text['sound'] + ' : ')
             self.soundLbl.config(
-                text=f"{vietnamese_text['setting']} \n{vietnamese_text['volume']} : "
+                text=f" - {vietnamese_text['setting']} \n\t{vietnamese_text['volume']} : "
             )
+            self.colorLbl.config(text = "\n - " + vietnamese_text['color'] + " " + vietnamese_text['text'].lower() + " : ")
+            self.colorBtn.config(text = vietnamese_text['change'] + " " + vietnamese_text['color'])
             self.applyBtn.config(text=vietnamese_text['apply'])
             self.returnBtn.config(text=vietnamese_text['return'])
             self.langBox.delete(0,'end')
             self.langBox['values'] = listCBLangVN
+    
+    def loadColorText(self) -> None:
+        self.title.config(fg = text_color)
+        self.langLbl.config(fg = text_color)
+        self.muteLbl.config(fg = text_color)
+        self.soundLbl.config(fg = text_color)
+        self.colorLbl.config(fg = text_color)
+        self.colorBtn.config(fg = text_color)
+        self.applyBtn.config(fg = text_color)
+        self.returnBtn.config(fg = text_color)
     
     def changeIcon(self) -> None:
         global unmute
@@ -710,6 +789,12 @@ class Setting(tk.Frame):
             self.muteBtn.config(image=self.unmuteImg)
             self.muteBtn.image = self.unmuteImg
             unmute = True
+    
+    def colorSetting(self) -> None:
+        global text_color
+        self.color = askcolor(color=text_color, title = "Text Game Color Choose")
+        text_color = str(self.color[1])
+        print(text_color)
 
     def setDefaultLanguage(self) -> None:
         self.langBox.current(setLang)
@@ -765,6 +850,9 @@ class Setting(tk.Frame):
 
         if unmute: print('unmute\n')
         elif not unmute: print('mute\n')
+
+        self.loadColorText()
+        print("Text color: ",text_color)
 
 
 class TrainCarriage(): 
@@ -1032,8 +1120,8 @@ class Player():
 class ActionBtn(Button):
     def __init__(self, window : Tk, player, target, direction, imgBtn):
         super().__init__(window, width=50, height=50, 
-            highlightbackground=TEXT_PURPLE, bg=TEXT_PURPLE, 
-            bd = 0, activebackground=TEXT_BLACK, cursor='target')
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.fenetre = window
         self.target = target
         self.imgBtn = imgBtn
