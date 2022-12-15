@@ -1,7 +1,7 @@
 
 
 ####### DATA VALUE (constant): ###########
-
+NB_WAGONS : int = 3
 NOM_BANDIT_1 : str = 'Shadow'
 NOM_BANDIT_2 : str = 'Killer'
 NB_ACTIONS : int = 4
@@ -16,10 +16,13 @@ saveGame : bool = False
 gameOver : bool = False
 startTheGame : bool = False
 startPlanning : bool = False
+pauseGame : bool = False
 
 ### for fixing value:
-nb_wagons : int = 3
+nb_wagons : int = NB_WAGONS
+nb_actions : int = NB_ACTIONS
 canPlusWG : bool = True
+canClicAct : bool = True
 
 #### set train carriages image size:
 carSizeX : int = 298
@@ -84,6 +87,7 @@ playerSizeY : int = 32
 stopAfterMove : bool = False
 stopPointActions_wg3 : list = [110, 310, 510, 710, 910, 1100]
 stopPointActions_wg4 : list = [80, 230, 380, 530, 680, 830, 980, 1130]
+planningList : list = []
 
 #### set language:
 listCBLangEN : tuple = ('English', 'French', 'Vietnamese')
@@ -120,6 +124,7 @@ path_eye_can_look : str = "./assets/Images/eye_can_look.png"
 path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
+path_info_icon : str = "./assets/Images/information-icon.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
@@ -137,6 +142,8 @@ path_thief_AttackRight : str = "./assets/Images/Caracters/Thief/AttackRight/Atta
 path_thief_AttackLeft : str = "./assets/Images/Caracters/Thief/AttackLeft/Attack_"
 path_thief_DieRight : str = "./assets/Images/Caracters/Thief/DieRight/Die_"
 path_thief_DieLeft : str = "./assets/Images/Caracters/Thief/DieLeft/Die_"
+path_night_thief_IdleRight : str = './assets/Images/Caracters/NightThief/IdleRight/Idle_'
+path_night_thief_IdleLeft : str = './assets/Images/Caracters/NightThief/IdleLeft/Idle_'
 ### link url website:
 url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 

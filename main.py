@@ -180,8 +180,9 @@ class Game(tk.Frame):
         ##### Set canvas 
         self.tkraise()
         # self.pack_propagate(False)
-        self.bg_x = -5
-        self.bg_y = 0
+        self.bg_x : int = -5
+        self.bg_y : int = 0
+        self.actState : int = 0
         self.canvas = tk.Canvas(self, 
             height = 576, width = 1194, 
             bd = 0, bg = "#000000",
@@ -191,7 +192,6 @@ class Game(tk.Frame):
             anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
         self.canvas.focus_set()
-        self.runningTrain()
         
         ##### Set background
         self.trainPath = path_train_car
@@ -250,6 +250,7 @@ class Game(tk.Frame):
         self.minusBtn.place(x = 1090, y = 5)
         self.loadgameData()
         self.loadTextLang()
+        self.runningTrain()
 
         ### test key move:
         self.canvas.bind('<KeyPress-Left>', lambda e: self.player.testMoveLeftKey(e))
@@ -270,17 +271,35 @@ class Game(tk.Frame):
                 self.hideWagon()
     
     def pauseGame(self) -> None:
-        pass
+        global pauseGame
+        if self.unpauseBtn.image == self.pauseImg:
+            self.unpauseBtn.config(image=self.unpauseImg)
+            self.unpauseBtn.image = self.unpauseImg
+            pauseGame = True
+        elif self.unpauseBtn.image == self.unpauseImg:
+            self.unpauseBtn.config(image=self.pauseImg)
+            self.unpauseBtn.image = self.pauseImg
+            pauseGame = False
 
     def startGamePlay(self) -> None:
-        global startTheGame
-        if not startTheGame and not startPlanning:
-            startTheGame = True
-            self.loadTextLang()
-            self.minusBtn.destroy()
-        elif startTheGame and not startPlanning:
-            self.loadTextLang()
-            self.planning = PlanningWindow(self)
+        global startTheGame, startPlanning, pauseGame, planningList, canClicAct
+        if canClicAct:
+            if not startTheGame and not startPlanning:
+                startTheGame = True
+                self.loadTextLang()
+                self.minusBtn.destroy()
+            elif startTheGame and not startPlanning:
+                self.loadTextLang()
+                self.planning = PlanningWindow(self)
+                pauseGame = True
+            elif startTheGame and startPlanning:
+                canClicAct = False
+                self.makeActFromList(planningList[self.actState])
+                self.actState += 1
+                if self.actState >= nb_actions: 
+                    planningList.clear()
+                    startPlanning = False
+                    self.actState = 0
     
     def setNbrWagon(self) -> None:
         global nb_wagons, canPlusWG
@@ -347,7 +366,7 @@ class Game(tk.Frame):
             if not startTheGame and not startPlanning:
                 self.startBtn.config(text=english_text['start'].upper())
             elif startTheGame and not startPlanning:
-                self.startBtn.config(text=english_text['planning'] + " " + english_text['action'])
+                self.startBtn.config(text=english_text['planning'] + " the " + english_text['action'] +"s")
             else: self.startBtn.config(text=english_text['action'].upper())
 
         elif setLang == int(langList[1]):
@@ -355,7 +374,7 @@ class Game(tk.Frame):
             if not startTheGame and not startPlanning:
                 self.startBtn.config(text=francais_texte['start'].upper())
             elif startTheGame and not startPlanning:
-                self.startBtn.config(text=francais_texte['planning'] + " " + francais_texte['action'])
+                self.startBtn.config(text=francais_texte['planning'] + " les " + francais_texte['action']+"s")
             else: self.startBtn.config(text=francais_texte['action'].upper())
         
         elif setLang == int(langList[2]):
@@ -412,17 +431,25 @@ class Game(tk.Frame):
             playerPosX, playerPosY, 1)
     
     def runningTrain(self) -> None:
-        self.canvas.move(self.background, self.bg_x, self.bg_y)
-        # print(self.canvas.coords(self.background)[0])
-        if self.canvas.coords(self.background)[0] <= -4000:
-            self.canvas.delete(self.background)
-            self.background = self.canvas.create_image(0, 260, 
-                anchor = W, image = self.bgImg)
+        if not pauseGame:
+            self.canvas.move(self.background, self.bg_x, self.bg_y)
+            # print(self.canvas.coords(self.background)[0])
+            if self.canvas.coords(self.background)[0] <= -4000:
+                self.canvas.delete(self.background)
+                self.background = self.canvas.create_image(0, 260, 
+                    anchor = W, image = self.bgImg)
+        self.loadTextLang()
         self.canvas.after(10, self.runningTrain)
 
-    def createClouds(self):
-        Clouds(self, self.canvas)
+    def createClouds(self) -> None:
+        if not pauseGame: Clouds(self, self.canvas)
         self.after(900, self.createClouds)
+    
+    def makeActFromList(self, act:str) -> None:
+        if act == "Move Left": self.player.playerMoveLeft()
+        elif act == "Move Right": self.player.playerMoveRight()
+        elif act == "Move Up": self.player.playerMoveUp()
+        elif act == "Move Down": self.player.playerMoveDown()
     
     def loadgameData(self) -> None:
         if canSeek:
@@ -432,17 +459,101 @@ class Game(tk.Frame):
         self.changeIconMinus()
 
 class PlanningWindow(Toplevel):
-    def __init__(self, master = None):
+    def __init__(self, master = None) -> None:
         super().__init__(master=master)
         self.title("Planning the Actions")
         self.geometry('1194x400')
         self.resizable(False, False)
         self.wm_attributes("-topmost", 2)
         self['bg'] = 'black'
+        self.canvas = tk.Canvas(self, 
+            height = 400, width = 1194, 
+            bd = 0, bg = "#000000",
+            highlightthickness = 0)
+        self.canvas.pack(side=TOP,padx=0,pady=0)
+        self.canvas.focus_set()
+        self.buttonPosX : int = 100
+        self.selectedActions = tk.StringVar()
+        self.selectedActions.trace("w", self.actionsSelected)
+        self.createActionButtons()
+        self.confirmBtn = tk.Button(self.canvas, text="Confirm",
+            fg = text_color, font=FONT_HELV,
+            command = self.confirmActions,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.confirmBtn.place(x = 1090, y = 350)
+
+        self.cancelBtn = tk.Button(self.canvas, text="Cancel",
+            fg = text_color, font=FONT_HELV,
+            command = self.cancelActions,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.cancelBtn.place(x = 1000, y = 350)
+
+        self.actLstLbl = tk.Label(self.canvas, text="List of the Actions:", 
+            fg = text_color, font=FONT_HELV,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.actLstLbl.place(x = 100, y = 50)
+
+        self.showActList = tk.Label(self.canvas, text="", 
+            fg = text_color, font=FONT_HELV,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.showActList.place(x = 300, y = 50)
+
+        self.refreshLstBtn = tk.Button(self.canvas, text="Refresh List",
+            fg = text_color, font=FONT_HELV,
+            command = self.refreshLstActions,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.refreshLstBtn.place(x = 1000, y = 50)
+    
+    def actionsSelected(self, *args) -> None:
+        global planningList
+        planningList.append(self.selectedActions.get())
+        print(planningList)
+        self.showActList.config(text=f"{planningList}".replace("'", " "))
+    
+    def refreshLstActions(self) -> None:
+        global planningList
+        planningList.clear()
+        self.showActList.config(text=f"{planningList}".replace("'", " "))
+
+    def createActionButtons(self, index:int = 0) -> None:
+        ### action list variables:
+        action_lst = ('Move Left', 'Move Right', 
+                        'Move Up', 'Move Down', 
+                        'Attack', 'Collect Items')
+
+        ### create the menubutton:
+        actionBtn : list = []
+        actionsMN : list = []
+        for _nbActS in range(nb_actions):
+            actionBtn.append(Menubutton(self.canvas, text=f"Action {index+1}".upper(), 
+                fg = text_color, highlightbackground=bg_color,
+                bg=bg_color, bd = 0, font=FONT_HELV, cursor = 'target',
+                activebackground=TEXT_PURPLE))
+            actionsMN.append(tk.Menu(actionBtn[index], tearoff = 0))
+            actionBtn[index]["menu"] = actionsMN[index]
+            for action in action_lst:
+                actionsMN[index].add_radiobutton(label = action, 
+                    font=FONT_HELV, background=TEXT_BLACK, foreground=text_color,
+                    activebackground=TEXT_PURPLE, activeforeground='blue',
+                    value = action, variable = self.selectedActions)
+            actionBtn[index].place(x = self.buttonPosX, y = 100)
+            index += 1; self.buttonPosX += 200
+    
+    def cancelActions(self) -> None:
+        global pauseGame
+        pauseGame = False
+        self.destroy()
     
     def confirmActions(self) -> None:
-        global startPlanning
+        global startPlanning, pauseGame
         startPlanning = True
+        pauseGame = False
+        self.destroy()
 
 class Rule(tk.Frame):
     def __init__(self, master) -> None:
@@ -893,6 +1004,23 @@ class Items():
         self.showItem = self.canvas.create_image(self.x, self.y, image=self.itemImg)
 
 
+
+class Bandits():
+    def __init__(self, parent, can:Canvas, bd_x:int, bd_y:int, position:int):
+        self.parent = parent
+        self.can = can
+        self.bd_x = bd_x
+        self.bd_y = bd_y
+        self.position = position
+        self.position_y = 1
+        self.dirct = 1
+    
+    def movement(self, x:int, y:int) -> None:
+        self.can.move(self.img_j, x, y)
+        self.bd_x = x
+        self.bd_y = y
+
+
 class Player(): 
     def __init__(self, parent, can:Canvas, pl_x:int, pl_y:int, position:int):
         self.parent = parent
@@ -929,14 +1057,15 @@ class Player():
     def playerIdle(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
 
-        if self.dirct == 1:
-            playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        else:
-            playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
-        self.img_j =  item
-        index += 1
-        if index == 11: index = 1
+        if not pauseGame:
+            if self.dirct == 1:
+                playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            else:
+                playerImgIdle = self.can.playerImgIdle = ImageTk.PhotoImage(Image.open( path_thief_IdleLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgIdle)
+            self.img_j =  item
+            index += 1
+            if index == 11: index = 1
 
         if state == str(playerState[0]):
             self.can.after(100, self.playerIdle, item, index)
@@ -954,22 +1083,23 @@ class Player():
         global playerPosX
         self.can.delete(item)
 
-        if self.dirct == 1:
-            playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-            if playerMove:
-                playerPosX += 2
-                self.movement(playerPosX, playerPosY)
-        else:
-            playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-            if playerMove:
-                playerPosX -= 2
-                self.movement(playerPosX, playerPosY)
-        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
-        self.img_j = item
-        index += 1
-        if index == 11: index = 1
-        self.touchDoors()
-        self.stopAtPointsAfterMove()
+        if not pauseGame:
+            if self.dirct == 1:
+                playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+                if playerMove:
+                    playerPosX += 2
+                    self.movement(playerPosX, playerPosY)
+            else:
+                playerImgWalk = self.can.playerImgWalk = ImageTk.PhotoImage(Image.open( path_thief_WalkLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+                if playerMove:
+                    playerPosX -= 2
+                    self.movement(playerPosX, playerPosY)
+            item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgWalk)
+            self.img_j = item
+            index += 1
+            if index == 11: index = 1
+            self.touchDoors()
+            self.stopAtPointsAfterMove()
         
         if state == str(playerState[1]):
             self.can.after(100, self.playerWalk, item, index)
@@ -986,14 +1116,15 @@ class Player():
     def playerAttack(self, item = None, index:int = 1) -> None:
         self.can.delete(item)
 
-        if self.dirct == 1:
-            playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        else:
-            playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgAttack)
-        self.img_j =  item
-        index += 1
-        if index == 11: self.playerStop
+        if not pauseGame:
+            if self.dirct == 1:
+                playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            else:
+                playerImgAttack = self.can.playerImgAttack = ImageTk.PhotoImage(Image.open( path_thief_AttackLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgAttack)
+            self.img_j =  item
+            index += 1
+            if index == 11: self.playerStop
 
         if state == str(playerState[2]):
             self.can.after(100, self.playerAttack, item, index)
@@ -1011,11 +1142,12 @@ class Player():
         global gameOver
         self.can.delete(item)
 
-        if self.dirct == 1:
-            playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        else:
-            playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
-        item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgDie)
+        if not pauseGame:
+            if self.dirct == 1:
+                playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieRight + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            else:
+                playerImgDie = self.can.playerImgDie = ImageTk.PhotoImage(Image.open( path_thief_DieLeft + str(index) + '.png').resize((playerSizeX, playerSizeY)))
+            item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgDie)
         self.img_j =  item
         index += 1
         if state == str(playerState[3]) and index <= 11:
@@ -1045,10 +1177,11 @@ class Player():
         goDown = True; goUp = False
     
     def playerStop(self) -> None:
-        global playerMove, state
+        global playerMove, state, canClicAct
         state = str(playerState[0])
         print(self.can.coords(self.img_j))
         playerMove = False
+        canClicAct = True
 
     def touchDoors(self) -> None:
         global playerPosX, playerPosY, goDown, goUp, outsideTrain, stopAfterMove
@@ -1117,40 +1250,6 @@ class Player():
         print(event.keysym)
         self.playerStop()
 
-class ActionBtn(Button):
-    def __init__(self, window : Tk, player, target, direction, imgBtn):
-        super().__init__(window, width=50, height=50, 
-            highlightbackground=bg_color, bg=bg_color, 
-            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
-        self.fenetre = window
-        self.target = target
-        self.imgBtn = imgBtn
-        self.image = ImageTk.PhotoImage(Image.open(imgBtn).resize((50, 50)))
-        self.config(image = self.image)
-        self.player = player
-        self.direction = direction
-    
-        if self.direction == "right":
-            self.config(command=self.goRight)
-        elif self.direction == "left":
-            self.config(command=self.goLeft)
-        elif self.direction == "up":
-            self.config(command=self.goUp)
-        elif self.direction == "attack":
-            self.config(command=self.attack)
-    
-    def goRight(self) -> None:
-        pass
-
-    def goLeft(self) -> None:
-        pass
-
-    def goUp(self) -> None:
-        pass
-
-    def attack(self) -> None:
-        pass
-
 
 
 class Clouds():
@@ -1171,7 +1270,7 @@ class Clouds():
         self.movingClouds()
         
     def movingClouds(self):
-        self.canvas.move(self.fallItem, self.vitesse, 0)
+        if not pauseGame: self.canvas.move(self.fallItem, self.vitesse, 0)
         if (self.canvas.coords(self.fallItem)[0] < randint(-100, 200)):
             self.canvas.delete(self.fallItem)
         else:
