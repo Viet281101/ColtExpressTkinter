@@ -5,7 +5,7 @@
 ### Project theme:
 This project invites you to build an electronic and somewhat simplified version of the Colt Express game by Python.
 
-![train head image](./assets/Images/Train/TrainFullGray.png)
+![train pixel test](./assets/Images/Train/Train_Test1.png)
 
 #### Overview of game rules:
 
@@ -111,4 +111,4 @@ _2 ème année Licence Informatique_
 _Matière: Programmation d’interfaces_
 
 
-![train pixel test](./assets/Images/Train/Train_Test1.png)
+![train head image](./assets/Images/Train/TrainFullGray.png)![train head image](./assets/Images/Train/TrainFullGreen.png)![train head image](./assets/Images/Train/TrainBack.png)

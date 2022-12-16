@@ -84,10 +84,15 @@ playerPosY : int = 533
 playerSizeX : int = 32
 playerSizeY : int = 32
 
+canRobItem : bool = False
 stopAfterMove : bool = False
 stopPointActions_wg3 : list = [110, 310, 510, 710, 910, 1100]
 stopPointActions_wg4 : list = [80, 230, 380, 530, 680, 830, 980, 1130]
 planningList : list = []
+
+#### Gems:
+gemsPosX : int = 533
+gemsPosY : int = 300
 
 #### set language:
 listCBLangEN : tuple = ('English', 'French', 'Vietnamese')
@@ -125,6 +130,9 @@ path_eye_can_not_look : str = "./assets/Images/eye_can_not_look.png"
 path_arrow_icon_up : str = "./assets/Images/arrow_up.png"
 path_github_icon : str = "./assets/Images/github_icon.png"
 path_info_icon : str = "./assets/Images/information-icon.png"
+path_blue_gem : str = "./assets/Images/Items/blue_diamond.png"
+path_green_gem : str = "./assets/Images/Items/green_diamond.png"
+path_red_gem : str = "./assets/Images/Items/red_diamond.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
 path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
@@ -149,6 +157,7 @@ path_night_thief_IdleLeft : str = './assets/Images/Caracters/NightThief/IdleLeft
 ### link url website:
 url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 
+gems : list = [path_red_gem, path_blue_gem, path_green_gem]
 
 #################################### LANGUE TEXT SETTING ###########################################
 english_text : dict = {

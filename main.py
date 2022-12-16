@@ -295,6 +295,7 @@ class Game(tk.Frame):
                 startTheGame = True
                 self.loadTextLang()
                 self.minusBtn.destroy()
+                self.createItems()
             elif startTheGame and not startPlanning:
                 self.loadTextLang()
                 self.planning = PlanningWindow(self)
@@ -438,6 +439,12 @@ class Game(tk.Frame):
         self.player = Player(self, self.canvas, 
             playerPosX, playerPosY, 1)
     
+    def createItems(self) -> None:
+        self.gems : list = []
+        for _nbrItems in range(randint(1, 5)):
+            self.gems.append(Items(self.canvas, self.player, 
+            gemsPosY, gemsPosX, 14, 14, 500, choice(gems)))
+    
     def runningTrain(self) -> None:
         if not pauseGame:
             self.canvas.move(self.background, self.bg_x, self.bg_y)
@@ -458,6 +465,8 @@ class Game(tk.Frame):
         elif act == "Move Right": self.player.playerMoveRight()
         elif act == "Move Up": self.player.playerMoveUp()
         elif act == "Move Down": self.player.playerMoveDown()
+        elif act == "Attack": self.player.playerAttack()
+        elif act == "Rob Item": self.player.playerRobItems()
     
     def loadgameData(self) -> None:
         if canSeek:
@@ -532,7 +541,7 @@ class PlanningWindow(Toplevel):
         ### action list variables:
         action_lst = ('Move Left', 'Move Right', 
                         'Move Up', 'Move Down', 
-                        'Attack', 'Collect Items')
+                        'Attack', 'Rob Item')
 
         ### create the menubutton:
         actionBtn : list = []
@@ -754,13 +763,14 @@ class Setting(tk.Frame):
         self.langLbl.grid(row = 2, column = 0, sticky = W)
         
         self.Cbstyle = ttk.Style()
-        self.Cbstyle.map('TCombobox', fieldbackground=[('readonly',text_color)])
-        self.Cbstyle.map('TCombobox', selectbackground=[('readonly', text_color)])
-        self.Cbstyle.map('TCombobox', selectforeground=[('readonly', 'black')])
+        self.Cbstyle.map('TCombobox', fieldbackground=[('readonly',bg_color)])
+        self.Cbstyle.map('TCombobox', selectbackground=[('readonly', bg_color)])
+        self.Cbstyle.map('TCombobox', selectforeground=[('readonly', text_color)])
         
         self.langTxt = tk.StringVar()
         self.langBox = ttk.Combobox(self, textvariable=self.langTxt, 
-            values=listCBLangEN, width=14)
+            values=listCBLangEN, width=14,
+            font=("Helvetica", 11, "bold"), foreground=text_color)
         self.langBox.grid(row = 2, column = 1, sticky = W)
         self.langBox['state'] = 'readonly'
         self.setDefaultLanguage()
@@ -914,6 +924,8 @@ class Setting(tk.Frame):
         self.colorBtn.config(fg = text_color)
         self.applyBtn.config(fg = text_color)
         self.returnBtn.config(fg = text_color)
+        self.langBox.config(foreground=text_color)
+        self.scaleSound.config(fg=text_color, troughcolor = text_color)
     
     def changeIcon(self) -> None:
         global unmute
@@ -1013,8 +1025,9 @@ class TrainCarriage():
 
 
 class Items():
-    def __init__(self, canvas:Canvas, x:int, y:int, size_x:int, size_y:int, price:int, photo) -> None:
+    def __init__(self, canvas:Canvas, player, x:int, y:int, size_x:int, size_y:int, price:int, photo) -> None:
         self.canvas = canvas
+        self.player = player
         self.x = x
         self.y = y
         self.size_x = size_x
@@ -1207,6 +1220,12 @@ class Player():
         print(self.can.coords(self.img_j))
         playerMove = False
         canClicAct = True
+    
+    def playerRobItems(self) -> None:
+        global canRobItem
+        canRobItem = True
+        if self.dirct == 1: self.playerMoveRight()
+        elif self.dirct == 0: self.playerMoveLeft()
 
     def touchDoors(self) -> None:
         global playerPosX, playerPosY, goDown, goUp, outsideTrain, stopAfterMove
