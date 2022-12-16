@@ -223,6 +223,15 @@ class Game(tk.Frame):
             bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.currentActLbl.place(x = 450, y = 5)
 
+        ### view information menu:
+        self.infoIcon = ImageTk.PhotoImage(Image.open(path_info_icon).resize((30, 30)))
+        self.infoBtn = tk.Button(self.canvas, image = self.infoIcon, 
+            relief = FLAT, command = lambda: master.switch_frame(MenuInfo), width=30,
+            highlightbackground=bg_color, bg=bg_color, bd = 0, 
+            activebackground=TEXT_PURPLE)
+        self.infoBtn.image = self.infoIcon
+        self.infoBtn.place(x = 1125, y = 0)
+
         ### pause game button:
         self.pauseImg = ImageTk.PhotoImage(Image.open(path_pause_icon).resize((30, 30)))
         self.unpauseImg = ImageTk.PhotoImage(Image.open(path_unpause_icon).resize((30, 30)))
@@ -243,7 +252,7 @@ class Game(tk.Frame):
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE)
         self.nolookBtn.image = self.canlookImg
-        self.nolookBtn.place(x = 1125, y = 0)
+        self.nolookBtn.place(x = 1090, y = 0)
 
         ### button set number wagon
         self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((20, 20)))
@@ -254,7 +263,7 @@ class Game(tk.Frame):
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE)
         self.minusBtn.image = self.plusImg
-        self.minusBtn.place(x = 1090, y = 5)
+        self.minusBtn.place(x = 1055, y = 5)
         self.loadgameData()
         self.loadTextLang()
         self.runningTrain()
@@ -454,6 +463,7 @@ class Game(tk.Frame):
                 self.background = self.canvas.create_image(0, 260, 
                     anchor = W, image = self.bgImg)
         self.loadTextLang()
+        if canRobItem and playerPosX == gemsPosX: del self.gems
         self.canvas.after(10, self.runningTrain)
 
     def createClouds(self) -> None:
@@ -474,6 +484,7 @@ class Game(tk.Frame):
             self.nolookBtn.image = self.nolookImg
             self.showWagon()
         self.changeIconMinus()
+
 
 class PlanningWindow(Toplevel):
     def __init__(self, master = None) -> None:
@@ -528,9 +539,10 @@ class PlanningWindow(Toplevel):
     
     def actionsSelected(self, *args) -> None:
         global planningList
-        planningList.append(self.selectedActions.get())
-        print(planningList)
-        self.showActList.config(text=f"{planningList}".replace("'", " "))
+        if int(len(planningList)) < nb_actions:
+            planningList.append(self.selectedActions.get())
+            # print(planningList)
+            self.showActList.config(text=f"{planningList}".replace("'", " "))
     
     def refreshLstActions(self) -> None:
         global planningList
@@ -571,6 +583,43 @@ class PlanningWindow(Toplevel):
         startPlanning = True
         pauseGame = False
         self.destroy()
+
+
+class MenuInfo(tk.Frame):
+    def __init__(self, master) -> None:
+        tk.Frame.__init__(self, master)
+        stopTrainSound()
+
+        ##### Set canvas 
+        self.tkraise()
+        self.canvas = tk.Canvas(self, 
+            height = 576, width = 1194, 
+            bd = 0, bg = "#000000",
+            highlightthickness = 0)
+        self.canvas.pack(side=TOP,padx=0,pady=0)
+        self.canvas.focus_set()
+
+    
+        #### return to the game button:
+        self.returnBtn = tk.Button(self.canvas, text="",
+            fg = text_color, font=FONT_HELV,
+            command = lambda: master.switch_frame(Game),
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.returnBtn.place(x = 0, y = 0)
+    
+        self.loadTextLang()
+    
+    def loadTextLang(self) -> None:
+        if setLang == int(langList[0]):
+            self.returnBtn.config(text=english_text['return'])
+
+        elif setLang == int(langList[1]):
+            self.returnBtn.config(text=francais_texte['return'])
+        
+        elif setLang == int(langList[2]):
+            self.returnBtn.config(text=vietnamese_text['return'])
+
 
 class Rule(tk.Frame):
     def __init__(self, master) -> None:

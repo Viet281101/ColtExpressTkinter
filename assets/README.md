@@ -14,10 +14,10 @@
 
 
 2) Musics/SFX:
-    - [train sound](https://mixkit.co/free-sound-effects/train/) 
+    - [train sound](https://mixkit.co/free-sound-effects/train/) and/or record by my telephone at the train station
 
 
-    - [credit music](https://opengameart.org/content/menu-music) from OpenGameArt.com
+    - [credit music](https://opengameart.org/content/menu-music) from [OpenGameArt.com](https://opengameart.org/)
 
 
     - 'click sound' make by my own with this site: [rfxgen](https://raylibtech.itch.io/rfxgen)

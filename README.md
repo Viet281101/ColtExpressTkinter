@@ -112,3 +112,22 @@ _Matière: Programmation d’interfaces_
 
 
 ![train head image](./assets/Images/Train/TrainFullGray.png)![train head image](./assets/Images/Train/TrainFullGreen.png)![train head image](./assets/Images/Train/TrainBack.png)
+
+
+
+#### Problèmes rencontrés lors du travail sur le projet:
+- La lourdeur des lignes de commande rend l'organisation, l'édition et l'ajout de quelque chose de très genant. Puisqu'il est possible que des fonctionnalités nouvellement ajoutées rendent les anciennes lignes de code inopérantes, il s'agit d'une question d'optimisation.
+
+-  Les graphismes ne sont pas du tout à fait adpaptés au programme, il faut donc ajouter beaucoup de code pour ajuster la taille et la position de l'image, pour moi c'est très simple mais cela prend vraiment du temps.
+
+- De nombreuses classes de la bibliothèque 'tkinter' ne répondaient pas à mes besoins en animations graphics, en changement de foreground avec fichiers .ttf ou 'scrolling infinty background image' method comme dans la bibliothèque 'pygame'. Cela m'a couté beaucoup de temps pour trouver d'autres solution avec des fonctionnalités similaires.
+
+
+#### Reference:
+- Vscode 
+- LibreSprite
+- Web resources: 
+    + [OpenGameArt.com](https://opengameart.org/)
+    + [rfxgen](https://raylibtech.itch.io/rfxgen)
+    + [mixkit](https://mixkit.co/)
+
