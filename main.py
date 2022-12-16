@@ -216,6 +216,13 @@ class Game(tk.Frame):
             bd = 0, activebackground=TEXT_PURPLE, cursor='target')
         self.startBtn.place(x = 200, y = 0)
 
+        ### view current action in state:
+        self.currentActLbl = tk.Label(self.canvas, text="",
+            fg = text_color, font=FONT_HELV,
+            highlightbackground=bg_color, bg=bg_color, 
+            bd = 0, activebackground=TEXT_PURPLE, cursor='target')
+        self.currentActLbl.place(x = 450, y = 5)
+
         ### pause game button:
         self.pauseImg = ImageTk.PhotoImage(Image.open(path_pause_icon).resize((30, 30)))
         self.unpauseImg = ImageTk.PhotoImage(Image.open(path_unpause_icon).resize((30, 30)))
@@ -295,6 +302,7 @@ class Game(tk.Frame):
             elif startTheGame and startPlanning:
                 canClicAct = False
                 self.makeActFromList(planningList[self.actState])
+                self.currentActLbl.config(text=planningList[self.actState])
                 self.actState += 1
                 if self.actState >= nb_actions: 
                     planningList.clear()
@@ -569,6 +577,14 @@ class Rule(tk.Frame):
         self.canvas.pack(side=TOP,padx=0,pady=0)
         self.canvas.focus_set()
 
+        self.ruleGameTxt = Text(self.canvas, 
+            width = 1194, height=576, 
+            bg = bg_color, bd = 0, foreground=text_color, 
+            insertborderwidth=0, autoseparators=True)
+        self.ruleGameTxt.place(x = -1, y = -1)
+        self.scroll = Scrollbar(self.canvas, command = self.ruleGameTxt.yview)
+        self.ruleGameTxt.configure(yscrollcommand = self.scroll.set)
+        self.ruleGameTxt.insert('1.0', game_rule_EN)
 
         #### return to the start menu button:
         self.returnBtn = tk.Button(self.canvas, text="",
@@ -583,12 +599,18 @@ class Rule(tk.Frame):
     def loadTextLang(self) -> None:
         if setLang == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
+            self.ruleGameTxt.delete('1.0', END)
+            self.ruleGameTxt.insert('1.0', game_rule_EN)
 
         elif setLang == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
+            self.ruleGameTxt.delete('1.0', END)
+            self.ruleGameTxt.insert('1.0', game_rule_FR)
         
         elif setLang == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
+            self.ruleGameTxt.delete('1.0', END)
+            self.ruleGameTxt.insert('1.0', game_rule_VN)
 
 
 class Credit(tk.Frame):
@@ -851,6 +873,7 @@ class Setting(tk.Frame):
             self.returnBtn.config(text=english_text['return'])
             self.langBox.delete(0,'end')
             self.langBox['values'] = listCBLangEN
+            self.langBox.current(setLang)
         
         elif setLang == int(langList[1]):
             self.title.config(text = francais_texte['setting'])
@@ -865,6 +888,7 @@ class Setting(tk.Frame):
             self.returnBtn.config(text=francais_texte['return'])
             self.langBox.delete(0,'end')
             self.langBox['values'] = listCBLangFR
+            self.langBox.current(setLang)
         
         elif setLang == int(langList[2]):
             self.title.config(text = vietnamese_text['setting'] + ':')
@@ -879,6 +903,7 @@ class Setting(tk.Frame):
             self.returnBtn.config(text=vietnamese_text['return'])
             self.langBox.delete(0,'end')
             self.langBox['values'] = listCBLangVN
+            self.langBox.current(setLang)
     
     def loadColorText(self) -> None:
         self.title.config(fg = text_color)

@@ -5,7 +5,7 @@
 ### Project theme:
 This project invites you to build an electronic and somewhat simplified version of the Colt Express game by Python.
 
-![train head image](./assets/Images/Train/train_head.png)
+![train head image](./assets/Images/Train/TrainFullGray.png)
 
 #### Overview of game rules:
 
@@ -57,8 +57,7 @@ _Subject: Programming of interfaces_
 -----------------------------------
 
 
-![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png) ![arrow down](./assets/Images/arrow_down.png) ![arrow up](./assets/Images/arrow_up.png)
-
+![train pixel test](./assets/Images/Train/Train_Test2.png)
 
 # Colt Express avec Tkinter Python
 
@@ -112,4 +111,4 @@ _2 ème année Licence Informatique_
 _Matière: Programmation d’interfaces_
 
 
-![train pixel test](./assets/Images/Train/train_pixel_test.png)
+![train pixel test](./assets/Images/Train/Train_Test1.png)

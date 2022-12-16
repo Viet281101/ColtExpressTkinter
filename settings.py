@@ -134,6 +134,8 @@ path_cloud_2_bg : str = './assets/Images/Background/clouds2.png'
 path_cloud_3_bg : str = './assets/Images/Background/clouds3.png'
 path_train_full_green : str = "./assets/Images/Train/TrainFullGreen.png"
 path_train_full_gray : str = "./assets/Images/Train/TrainFullGray.png"
+path_train_test_1 : str = "./assets/Images/Train/Train_Test1.png"
+path_train_test_2 : str = "./assets/Images/Train/Train_Test2.png"
 path_thief_IdleRight : str = "./assets/Images/Caracters/Thief/IdleRight/Idle_"
 path_thief_IdleLeft : str = "./assets/Images/Caracters/Thief/IdleLeft/Idle_"
 path_thief_WalkRight : str = "./assets/Images/Caracters/Thief/WalkRight/Walk_"
@@ -148,7 +150,7 @@ path_night_thief_IdleLeft : str = './assets/Images/Caracters/NightThief/IdleLeft
 url_github_project : str = "https://github.com/Viet281101/Colt_Express_Tkinter"
 
 
-######## LANGUE TEXT SETTING ###########
+#################################### LANGUE TEXT SETTING ###########################################
 english_text : dict = {
     'play' : "Play",
     'start' : "Start",
@@ -230,7 +232,122 @@ vietnamese_text : dict = {
     'caracter_shoot' : "Bắn một tên cướp khác gần đó để khiến hắn đánh rơi chiến lợi phẩm của mình.",
 }
 
-########## CREDIT TEXT ######################
+
+
+
+############################################ GAME RULE: ###################################################
+game_rule_EN = '''
+
+
+        Overview of game rules:
+
+        The game takes place on board a train, consisting of a locomotive and a number of equal carriages to the number of players. 
+        Players embody bandits who have jumped on board to rob the passengers. 
+        Objective: collect as much loot as possible, each for himself. 
+        This is a game of programming, in which one alternates between two phases:
+
+        - Planning: each player secretly decides on a certain number of actions, which his character will perform in order.
+
+        - Action: perform all the actions number 1, then all the number 2, and this until the end.
+
+        The bandits can be in the wagons or the locomotive, and for each of these elements either indoors or on the roof. 
+        In this statement, by abuse of language, we will designate by car a any element of the train, which may be the locomotive. 
+        The possible actions for bandits are:
+
+        - Move one car forwards or backwards, staying on the same floor.
+
+        - Go inside or climb onto the roof of their current wagon.
+
+        - Rob a traveler to collect loot (or simply loot loot that has been left there).
+
+        - Shoot another nearby bandit to make him drop his loot. The loot recoverable on board the train are:
+
+        - Purses worth €100 or €200, from passengers, inside the wagons.
+
+        - Jewelry worth €500, from passengers, inside the wagons.
+
+        - A hoard worth €1000, inside the locomotive, in the custody of the Marshall. 
+        A Marshall is present on board the train and can move between the locomotive and the wagons, always staying inside. 
+        He shoots at all the bandits who are in the same position as him and forced to take refuge on the roof.
+
+'''
+
+game_rule_FR = '''
+
+
+        Aperçu des règles du jeu :
+
+        Le jeu se déroule à bord d'un train, composé d'une locomotive et d'un nombre de wagons égal au nombre de joueurs.
+        Les joueurs incarnent des bandits qui ont sauté à bord pour voler les passagers. 
+        Objectif : récolter le plus de butin possible, chacun pour soi.
+        Il s'agit d'un jeu de programmation, dans lequel on alterne entre deux phases :
+
+        - Planification : chaque joueur décide secrètement d'un certain nombre d'actions, que son personnage effectuera dans l'ordre.
+
+        - Action : effectuez toutes les actions numéro 1, puis toutes les actions numéro 2, et ce jusqu'à la fin.
+
+        Les bandits peuvent être dans les wagons ou la locomotive, et pour chacun de ces éléments soit à l'intérieur soit sur le toit.
+        Dans cet énoncé, par abus de langage, on désignera par voiture un élément quelconque du train, qui peut être la locomotive.
+        Les actions possibles pour les bandits sont :
+
+        - Avancer ou reculer une voiture en restant au même étage.
+
+        - Entrez ou montez sur le toit de leur wagon actuel.
+
+        - Voler un voyageur pour récupérer du butin (ou simplement piller le butin qui y a été laissé).
+
+        - Tirez sur un autre bandit à proximité pour lui faire lâcher son butin. Les butins récupérables à bord du train sont :
+
+        - Les bourses d'une valeur de 100 € ou 200 €, des passagers, à l'intérieur des wagons.
+
+        - Bijoux d'une valeur de 500 €, provenant des passagers, à l'intérieur des wagons.
+
+        - Un trésor d'une valeur de 1000 €, à l'intérieur de la locomotive, sous la garde du Maréchal.
+        Un maréchal est présent à bord du train et peut se déplacer entre la locomotive et les wagons, en restant toujours à l'intérieur.
+        Il tire sur tous les bandits qui se trouvent dans la même position que lui et contraints de se réfugier sur le toit.
+
+'''
+
+
+game_rule_VN = '''
+
+
+        Tổng quan luật chơi:
+
+        Trò chơi diễn ra trên một đoàn tàu bao gồm một đầu máy và một số toa xe bằng với số lượng người chơi.
+        Người chơi hóa thân thành những tên cướp đã nhảy lên tàu để cướp hành khách. 
+        Mục tiêu: thu thập càng nhiều chiến lợi phẩm càng tốt, mỗi người cho mình.
+        Đây là một trò chơi lập trình, trong đó chúng tôi xen kẽ giữa hai giai đoạn:
+
+        - Lập kế hoạch: mỗi người chơi bí mật quyết định một số hành động mà nhân vật của mình sẽ thực hiện theo thứ tự.
+
+        - Động tác: thực hiện hết động tác số 1, rồi đến động tác số 2, cho đến hết.
+
+        Kẻ cướp có thể ở trong toa xe hoặc đầu máy xe lửa, và đối với từng bộ phận này ở bên trong hoặc trên mái nhà.
+        Trong tuyên bố này, bằng cách lạm dụng ngôn ngữ, chúng tôi sẽ chỉ định bằng ô tô bất kỳ phần tử nào của đoàn tàu, có thể là đầu máy.
+        Các hành động có thể cho kẻ cướp là:
+
+        - Tiến hoặc lùi xe khi vẫn ở trên cùng một mặt sàn.
+
+        - Đi vào hoặc trèo lên nóc toa xe hiện tại của họ.
+
+        - Cướp khách du lịch để lấy chiến lợi phẩm (hoặc chỉ cướp chiến lợi phẩm còn lại ở đó).
+
+        - Bắn một tên cướp khác gần đó để khiến hắn đánh rơi chiến lợi phẩm của mình. Chiến lợi phẩm có thể lấy được trên tàu là:
+
+        - Ví trị giá €100 hoặc €200 đối với hành khách để trong toa xe.
+
+        - Đồ trang sức trị giá €500, của hành khách, bên trong toa tàu.
+
+        - Một kho báu trị giá €1000, bên trong đầu máy, do Nguyên soái quản thúc.
+        Một cảnh sát trưởng có mặt trên tàu và có thể di chuyển giữa đầu máy và các toa xe, luôn ở bên trong.
+        Anh ta bắn vào tất cả những tên cướp ở cùng vị trí với anh ta và buộc phải trú ẩn trên mái nhà.
+
+'''
+
+
+
+####################################### CREDIT TEXT ############################################################
 credits_text_eng = '''
 ---------------------- CREDIT ----------------------
 
