@@ -913,7 +913,7 @@ class Setting(tk.Frame):
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE, 
             borderwidth = 0)
-        self.returnBtn.grid(row = 7, column=1, sticky = EW, padx=2)
+        self.returnBtn.grid(row = 7, column=1, sticky = EW)
 
         self.loadTextLang()
         self.loadColorText()

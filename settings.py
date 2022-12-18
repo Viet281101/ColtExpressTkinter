@@ -541,7 +541,7 @@ credits_text_vn = '''
             với các nguồn từ:
                 OpenGameArt.com
                 Pixelartmaker.com
-                Tự doSprite
+                LibreSprite
                 itch.io
 
             
