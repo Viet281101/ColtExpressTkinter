@@ -798,18 +798,18 @@ class Setting(tk.Frame):
         self.title = tk.Label(self, text="", fg = text_color, 
             font=('Helvetica 59 underline'), width=8,
             bd = 0, bg ='black', relief=None)
-        self.title.grid(row = 0, columnspan=2, sticky = W)
+        self.title.grid(row = 0, columnspan=2, sticky = EW)
 
         self.lineLbl_0 = tk.Label(self, width=44, height=3, 
             bd = 0, bg = 'black', relief=None)
-        self.lineLbl_0.grid(row=1, columnspan=2, sticky=W)
+        self.lineLbl_0.grid(row=1, columnspan=2, sticky=EW)
 
         #### Language Setting
         self.langLbl = tk.Label(self, text="", 
             fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
-        self.langLbl.grid(row = 2, column = 0, sticky = W)
+        self.langLbl.grid(row = 2, column = 0, sticky = EW)
         
         self.Cbstyle = ttk.Style()
         self.Cbstyle.map('TCombobox', fieldbackground=[('readonly',bg_color)])
@@ -820,7 +820,7 @@ class Setting(tk.Frame):
         self.langBox = ttk.Combobox(self, textvariable=self.langTxt, 
             values=listCBLangEN, width=14,
             font=("Helvetica", 11, "bold"), foreground=text_color)
-        self.langBox.grid(row = 2, column = 1, sticky = W)
+        self.langBox.grid(row = 2, column = 1, sticky = EW)
         self.langBox['state'] = 'readonly'
         self.setDefaultLanguage()
         self.langBox.bind('<<ComboboxSelected>>', self.updateLang)
@@ -830,7 +830,7 @@ class Setting(tk.Frame):
             fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
-        self.soundLbl.grid(row = 3, column = 0, sticky = W)
+        self.soundLbl.grid(row = 3, column = 0, sticky = EW)
         
         ### Sound Scale
         self.scaleVar = tk.StringVar()
@@ -839,17 +839,17 @@ class Setting(tk.Frame):
             fg = text_color, font=FONT_HELV, width=15, length = 126,
             highlightbackground = bg_color, 
             resolution=0.1, variable= self.scaleVar)
-        self.scaleSound.grid(row = 3, column = 1, sticky = W)
+        self.scaleSound.grid(row = 3, column = 1, sticky = EW)
 
         ### Mute and Unmute setting
         self.muteLbl = tk.Label(self, text = " - Sound : ", 
             fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
-        self.muteLbl.grid(row=4, column=0, sticky=W)
+        self.muteLbl.grid(row=4, column=0, sticky=EW)
 
         self.musicBtnZone = tk.Frame(self, bg = '#000000', width=128, height=23)
-        self.musicBtnZone.grid(row=4, column=1, sticky=W)
+        self.musicBtnZone.grid(row=4, column=1, sticky=EW)
 
         self.unmuteImg = ImageTk.PhotoImage(Image.open(path_vol_icon_play).resize((23, 23)))
         self.muteImg = ImageTk.PhotoImage(Image.open(path_vol_icon_pause).resize((23, 23)))
@@ -885,19 +885,19 @@ class Setting(tk.Frame):
             fg = text_color, font=FONT_HELV, width = 20,
             bd = 0, bg ='black', relief=None, 
             anchor=W, justify=LEFT)
-        self.colorLbl.grid(row = 5, column = 0, sticky = W)
+        self.colorLbl.grid(row = 5, column = 0, sticky = EW)
 
         self.colorBtn = tk.Button(self, text= "", width = 14,
             fg = text_color, font=("Helvetica", 10, "bold"), command=self.colorSetting,
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE, height = 2,
             borderwidth = 0)
-        self.colorBtn.grid(row = 5, column=1, sticky = W, padx=2)
+        self.colorBtn.grid(row = 5, column=1, sticky = EW, padx=2)
 
         ### Space vertical
         self.lineLbl = tk.Label(self, width=44, height=5, 
             bd = 0, bg = 'black', relief=None)
-        self.lineLbl.grid(row=6, columnspan=2, sticky=W)
+        self.lineLbl.grid(row=6, columnspan=2, sticky=EW)
 
         ### Buttons
         self.applyBtn = tk.Button(self, text=english_text['apply'], width = 18,
@@ -905,7 +905,7 @@ class Setting(tk.Frame):
             command = self.applyChange,
             highlightbackground='#76428A', bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE)
-        self.applyBtn.grid(row = 7, column = 0, sticky=W)
+        self.applyBtn.grid(row = 7, column = 0, sticky=EW)
 
         self.returnBtn = tk.Button(self, text=english_text['return'], width = 9,
             fg = text_color, font=FONT_HELV,
@@ -913,7 +913,7 @@ class Setting(tk.Frame):
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
             activebackground=TEXT_PURPLE, 
             borderwidth = 0)
-        self.returnBtn.grid(row = 7, column=1, sticky = W, padx=2)
+        self.returnBtn.grid(row = 7, column=1, sticky = EW, padx=2)
 
         self.loadTextLang()
         self.loadColorText()
