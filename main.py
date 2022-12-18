@@ -475,7 +475,7 @@ class Game(tk.Frame):
         elif act == "Move Right": self.player.playerMoveRight()
         elif act == "Move Up": self.player.playerMoveUp()
         elif act == "Move Down": self.player.playerMoveDown()
-        elif act == "Attack": self.player.playerAttack()
+        elif act == "Attack": self.player.playerAttackEnemy()
         elif act == "Rob Item": self.player.playerRobItems()
     
     def loadgameData(self) -> None:
@@ -1211,7 +1211,7 @@ class Player():
             item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgAttack)
             self.img_j =  item
             index += 1
-            if index == 11: self.playerStop
+            if index == 11: self.playerStop()
 
         if state == str(playerState[2]):
             self.can.after(100, self.playerAttack, item, index)
@@ -1275,6 +1275,10 @@ class Player():
         canRobItem = True
         if self.dirct == 1: self.playerMoveRight()
         elif self.dirct == 0: self.playerMoveLeft()
+
+    def playerAttackEnemy(self) -> None:
+        global playerState, state
+        state = str(playerState[2])
 
     def touchDoors(self) -> None:
         global playerPosX, playerPosY, goDown, goUp, outsideTrain, stopAfterMove
