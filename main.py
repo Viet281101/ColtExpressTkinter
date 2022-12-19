@@ -87,21 +87,21 @@ class MenuStartWindow(tk.Frame):
         self.loadTextLang()
 
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.btn_start.config(text=english_text['play'])
             self.btn_ruler.config(text=english_text['rule'])
             self.btn_setting.config(text=english_text['setting'])
             self.btn_credit.config(text=english_text['credit'])
             self.btn_quit.config(text=english_text['quit'])
         
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.btn_start.config(text=francais_texte['play'])
             self.btn_ruler.config(text=francais_texte['rule'])
             self.btn_setting.config(text=francais_texte['setting'])
             self.btn_credit.config(text=francais_texte['credit'])
             self.btn_quit.config(text=francais_texte['quit'])
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.btn_start.config(text=vietnamese_text['play'])
             self.btn_ruler.config(text=vietnamese_text['rule'])
             self.btn_setting.config(text=vietnamese_text['setting'])
@@ -114,21 +114,21 @@ class MenuStartWindow(tk.Frame):
     
     def confirmBox(self) -> None:
         if unmute: clickSound()
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             confirm = messagebox.askquestion('Confirm Box', 
             english_text['confirm_quit'], 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
 
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             confirm = messagebox.askquestion('Confirm Box', 
             francais_texte['confirm_quit'], 
             icon='warning')
             if confirm == 'yes':
                 self.quit()
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             confirm = messagebox.askquestion('Confirm Box', 
             vietnamese_text['confirm_quit'],
             icon='warning')
@@ -187,7 +187,7 @@ class Game(tk.Frame):
             height = 576, width = 1194, 
             bd = 0, bg = "#000000",
             highlightthickness = 0)
-        self.bgImg = ImageTk.PhotoImage(Image.open(path_background_city).resize((5466, 328)))
+        self.bgImg = ImageTk.PhotoImage(Image.open(path_background_city).resize((5466, 328), Image.ANTIALIAS))
         self.background = self.canvas.create_image(0, 260, 
             anchor = W, image = self.bgImg)
         self.canvas.pack(side=TOP,padx=0,pady=0)
@@ -224,7 +224,7 @@ class Game(tk.Frame):
         self.currentActLbl.place(x = 450, y = 5)
 
         ### view information menu:
-        self.infoIcon = ImageTk.PhotoImage(Image.open(path_info_icon).resize((30, 30)))
+        self.infoIcon = ImageTk.PhotoImage(Image.open(path_info_icon).resize((30, 30), Image.ANTIALIAS))
         self.infoBtn = tk.Button(self.canvas, image = self.infoIcon, 
             relief = FLAT, command = lambda: master.switch_frame(MenuInfo), width=30,
             highlightbackground=bg_color, bg=bg_color, bd = 0, 
@@ -244,8 +244,8 @@ class Game(tk.Frame):
         self.unpauseBtn.place(x = 1160, y = 0)
 
         ### view inside train button:
-        self.canlookImg = ImageTk.PhotoImage(Image.open(path_eye_can_look).resize((30, 30)))
-        self.nolookImg = ImageTk.PhotoImage(Image.open(path_eye_can_not_look).resize((30, 30)))
+        self.canlookImg = ImageTk.PhotoImage(Image.open(path_eye_can_look).resize((30, 30), Image.ANTIALIAS))
+        self.nolookImg = ImageTk.PhotoImage(Image.open(path_eye_can_not_look).resize((30, 30), Image.ANTIALIAS))
 
         self.nolookBtn = tk.Button(self.canvas, image = self.canlookImg, 
             relief = FLAT, command = self.changeIconSeek, width=30,
@@ -255,8 +255,8 @@ class Game(tk.Frame):
         self.nolookBtn.place(x = 1090, y = 0)
 
         ### button set number wagon
-        self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((20, 20)))
-        self.minusImg = ImageTk.PhotoImage(Image.open(path_minus_icon).resize((20, 20)))
+        self.plusImg = ImageTk.PhotoImage(Image.open(path_plus_icon).resize((20, 20), Image.ANTIALIAS))
+        self.minusImg = ImageTk.PhotoImage(Image.open(path_minus_icon).resize((20, 20), Image.ANTIALIAS))
 
         self.minusBtn = tk.Button(self.canvas, image = self.plusImg, 
             relief = FLAT, command = self.setNbrWagon, width=30,
@@ -379,7 +379,7 @@ class Game(tk.Frame):
         canSeek = True; showFull = True
 
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
             if not startTheGame and not startPlanning:
                 self.startBtn.config(text=english_text['start'].upper())
@@ -387,7 +387,7 @@ class Game(tk.Frame):
                 self.startBtn.config(text=english_text['planning'] + " the " + english_text['action'] +"s")
             else: self.startBtn.config(text=english_text['action'].upper())
 
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
             if not startTheGame and not startPlanning:
                 self.startBtn.config(text=francais_texte['start'].upper())
@@ -395,7 +395,7 @@ class Game(tk.Frame):
                 self.startBtn.config(text=francais_texte['planning'] + " les " + francais_texte['action']+"s")
             else: self.startBtn.config(text=francais_texte['action'].upper())
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
             if not startTheGame and not startPlanning:
                 self.startBtn.config(text=vietnamese_text['start'].upper())
@@ -475,7 +475,9 @@ class Game(tk.Frame):
         elif act == "Move Right": self.player.playerMoveRight()
         elif act == "Move Up": self.player.playerMoveUp()
         elif act == "Move Down": self.player.playerMoveDown()
-        elif act == "Attack": self.player.playerAttackEnemy()
+        elif act == "Attack": 
+            self.player.playerAttackEnemy()
+            self.shootArrow = ArrowAttack(self, playerPosX, playerPosY, self.canvas, self.player.dirct)
         elif act == "Rob Item": self.player.playerRobItems()
     
     def loadgameData(self) -> None:
@@ -611,13 +613,13 @@ class MenuInfo(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
 
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
 
 
@@ -655,17 +657,17 @@ class Rule(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
             self.ruleGameTxt.delete('1.0', END)
             self.ruleGameTxt.insert('1.0', game_rule_EN)
 
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
             self.ruleGameTxt.delete('1.0', END)
             self.ruleGameTxt.insert('1.0', game_rule_FR)
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
             self.ruleGameTxt.delete('1.0', END)
             self.ruleGameTxt.insert('1.0', game_rule_VN)
@@ -752,15 +754,15 @@ class Credit(tk.Frame):
         self.loadTextLang()
     
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.returnBtn.config(text=english_text['return'])
             self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_eng)
 
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.returnBtn.config(text=francais_texte['return'])
             self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_fr)
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.returnBtn.config(text=vietnamese_text['return'])
             self.textCreditCV.itemconfig(self.creditTxt, text = credits_text_vn)
 
@@ -919,7 +921,7 @@ class Setting(tk.Frame):
         self.loadColorText()
     
     def loadTextLang(self) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             self.title.config(text=english_text['setting'].upper() + ':')
             self.langLbl.config(text= " - " + english_text['language'] + ' : ')
             self.muteLbl.config(text= " - " + english_text['sound'] + ' : ')
@@ -934,7 +936,7 @@ class Setting(tk.Frame):
             self.langBox['values'] = listCBLangEN
             self.langBox.current(setLang)
         
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             self.title.config(text = francais_texte['setting'])
             self.langLbl.config(text= " - " + francais_texte['language'] + ' : ')
             self.muteLbl.config(text= " - " + francais_texte['sound'] + ' : ')
@@ -949,7 +951,7 @@ class Setting(tk.Frame):
             self.langBox['values'] = listCBLangFR
             self.langBox.current(setLang)
         
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             self.title.config(text = vietnamese_text['setting'] + ':')
             self.langLbl.config(text= " - " + vietnamese_text['language'] + ' : ')
             self.muteLbl.config(text= " - " + vietnamese_text['sound'] + ' : ')
@@ -1011,21 +1013,21 @@ class Setting(tk.Frame):
         self.scaleVar.set(float(self.scaleVar.get()) + 5.0)
     
     def updateLang(self, event) -> None:
-        if setLang == int(langList[0]):
+        if int(setLang) == int(langList[0]):
             messagebox.showinfo(
-                title='Language Notification',
+                title=english_text['lang_not_title'],
                 message=f"You selected {self.langTxt.get()}!\n"+english_text['lang_not']
             )
         
-        elif setLang == int(langList[1]):
+        elif int(setLang) == int(langList[1]):
             messagebox.showinfo(
-                title='Langue Notification',
+                title=francais_texte['lang_not_title'],
                 message=f"Vous avez sélectionné {self.langTxt.get()}!\n"+francais_texte['lang_not']
             )
 
-        elif setLang == int(langList[2]):
+        elif int(setLang) == int(langList[2]):
             messagebox.showinfo(
-                title='Thông báo ngôn ngữ',
+                title=vietnamese_text['lang_not_title'],
                 message=f"Bạn đã chọn {self.langTxt.get()}!\n"+vietnamese_text['lang_not']
             )
         
@@ -1045,21 +1047,21 @@ class Setting(tk.Frame):
         print("Volume scale after apply: ", volume)
         print("Volume sound after apply: ", volume_sound)
 
-        if unmute: print('unmute\n')
-        elif not unmute: print('mute\n')
-
         self.loadColorText()
         print("Text color: ",text_color)
 
+        if unmute: print('unmute\n')
+        elif not unmute: print('mute\n')
+
 
 class TrainCarriage(): 
-    def __init__(self, canvas:Canvas, x:int, y:int, size_x:int, size_y:int, photo) -> None:
-        self.canvas = canvas
-        self.x = x
-        self.y = y
-        self.size_x = size_x
-        self.size_y = size_y
-        self.photo = photo
+    def __init__(self, canvas:Canvas, x:int, y:int, size_x:int, size_y:int, photo:str) -> None:
+        self.canvas : Canvas = canvas
+        self.x : int = x
+        self.y : int = y
+        self.size_x : int = size_x
+        self.size_y : int = size_y
+        self.photo : str = photo
         self.trainImg()
 
     def trainImg(self) -> None:
@@ -1074,15 +1076,15 @@ class TrainCarriage():
 
 
 class Items():
-    def __init__(self, canvas:Canvas, player, x:int, y:int, size_x:int, size_y:int, price:int, photo) -> None:
-        self.canvas = canvas
+    def __init__(self, canvas:Canvas, player, x:int, y:int, size_x:int, size_y:int, price:int, photo:str) -> None:
+        self.canvas : Canvas = canvas
         self.player = player
-        self.x = x
-        self.y = y
-        self.size_x = size_x
-        self.size_y = size_y
-        self.price = price
-        self.photo = photo
+        self.x : int = x
+        self.y : int = y
+        self.size_x : int = size_x
+        self.size_y : int = size_y
+        self.price : int = price
+        self.photo : str = photo
         print(self.canvas.coords(self.photo))
         self.showItems()
 
@@ -1095,12 +1097,12 @@ class Items():
 class Bandits():
     def __init__(self, parent, can:Canvas, bd_x:int, bd_y:int, position:int):
         self.parent = parent
-        self.can = can
-        self.bd_x = bd_x
-        self.bd_y = bd_y
-        self.position = position
-        self.position_y = 1
-        self.dirct = 1
+        self.can : Canvas = can
+        self.bd_x : int = bd_x
+        self.bd_y : int = bd_y
+        self.position : int = position
+        self.position_y : int = 1
+        self.dirct : int = 1
     
     def movement(self, x:int, y:int) -> None:
         self.can.move(self.img_j, x, y)
@@ -1111,13 +1113,13 @@ class Bandits():
 class Player(): 
     def __init__(self, parent, can:Canvas, pl_x:int, pl_y:int, position:int):
         self.parent = parent
-        self.can = can
-        self.pl_x = pl_x
-        self.pl_y = pl_y
+        self.can : Canvas = can
+        self.pl_x : int = pl_x
+        self.pl_y : int = pl_y
 
-        self.position_wagon = position
-        self.position_y = 1
-        self.dirct = 1
+        self.position_wagon : int = position
+        self.position_y : int = 1
+        self.dirct : int = 1
         self.playerIdle()
         print(self.can.coords(self.img_j))
 
@@ -1154,15 +1156,15 @@ class Player():
             index += 1
             if index == 11: index = 1
 
-        if state == str(playerState[0]):
+        if str(state) == str(playerState[0]):
             self.can.after(100, self.playerIdle, item, index)
-        elif state == str(playerState[1]):
+        elif str(state) == str(playerState[1]):
             self.can.delete(item)
             self.playerWalk()
-        elif state == str(playerState[2]):
+        elif str(state) == str(playerState[2]):
             self.can.delete(item)
             self.playerAttack()
-        elif state == str(playerState[3]):
+        elif str(state) == str(playerState[3]):
             self.can.delete(item)
             self.playerDie()
     
@@ -1188,15 +1190,15 @@ class Player():
             self.touchDoors()
             self.stopAtPointsAfterMove()
         
-        if state == str(playerState[1]):
-            self.can.after(100, self.playerWalk, item, index)
-        elif state == str(playerState[0]):
+        if str(state) == str(playerState[1]):
+            self.can.after(80, self.playerWalk, item, index)
+        elif str(state) == str(playerState[0]):
             self.can.delete(item)
             self.playerIdle()
-        elif state == str(playerState[2]):
+        elif str(state) == str(playerState[2]):
             self.can.delete(item)
             self.playerAttack()
-        elif state == str(playerState[3]):
+        elif str(state) == str(playerState[3]):
             self.can.delete(item)
             self.playerDie()
     
@@ -1213,15 +1215,15 @@ class Player():
             index += 1
             if index == 11: self.playerStop()
 
-        if state == str(playerState[2]):
+        if str(state) == str(playerState[2]):
             self.can.after(100, self.playerAttack, item, index)
-        elif state == str(playerState[0]):
+        elif str(state) == str(playerState[0]):
             self.can.delete(item)
             self.playerIdle()
-        elif state == str(playerState[1]):
+        elif str(state) == str(playerState[1]):
             self.can.delete(item)
             self.playerWalk()
-        elif state == str(playerState[3]):
+        elif str(state) == str(playerState[3]):
             self.can.delete(item)
             self.playerDie()
     
@@ -1237,7 +1239,7 @@ class Player():
             item = self.can.create_image(self.pl_x, self.pl_y, image = playerImgDie)
         self.img_j =  item
         index += 1
-        if state == str(playerState[3]) and index <= 11:
+        if str(state) == str(playerState[3]) and index <= 11:
             self.can.after(100, self.playerDie, item, index)
         if index == 11: gameOver = True
 
@@ -1283,33 +1285,33 @@ class Player():
     def touchDoors(self) -> None:
         global playerPosX, playerPosY, goDown, goUp, outsideTrain, stopAfterMove
         self.doors : list = []
-        if nb_wagons == 3: self.doors.clear(); self.doors += door_pos_3_wagon
-        elif nb_wagons == 4: self.doors.clear(); self.doors += door_pos_4_wagon
+        if int(nb_wagons) == 3: self.doors.clear(); self.doors += door_pos_3_wagon
+        elif int(nb_wagons) == 4: self.doors.clear(); self.doors += door_pos_4_wagon
         if playerPosX in self.doors:
             if not goUp and not goDown:
                 if playerPosX == int(self.doors[0]) or playerPosX == int(self.doors[-1]): self.playerStop()
                 else:
-                    if nb_wagons == 3:
+                    if int(nb_wagons) == 3:
                         if self.dirct == 1: playerPosX += 70; self.position_wagon += 1
                         else: playerPosX -= 70; self.position_wagon -= 1
                         self.movement(playerPosX, playerPosY)
                         stopAfterMove = True
-                    elif nb_wagons == 4:
+                    elif int(nb_wagons) == 4:
                         if self.dirct == 1: playerPosX += 52; self.position_wagon += 1
                         else: playerPosX -= 52; self.position_wagon -= 1
                         self.movement(playerPosX, playerPosY)
                         stopAfterMove = True
             elif goUp and not goDown and self.position_y == 1: 
-                if nb_wagons == 3: playerPosY -= 80
-                elif nb_wagons == 4: playerPosY -= 54
+                if int(nb_wagons) == 3: playerPosY -= 80
+                elif int(nb_wagons) == 4: playerPosY -= 54
                 self.movement(playerPosX, playerPosY)
                 self.playerMoveRight()
                 self.position_y += 1
                 stopAfterMove = True
                 goDown = True; goUp = False; outsideTrain = True
             elif not goUp and goDown and self.position_y > 1:
-                if nb_wagons == 3: playerPosY += 80
-                elif nb_wagons == 4: playerPosY += 54
+                if int(nb_wagons) == 3: playerPosY += 80
+                elif int(nb_wagons) == 4: playerPosY += 54
                 self.movement(playerPosX, playerPosY)
                 self.playerMoveRight()
                 self.position_y -=1
@@ -1320,8 +1322,8 @@ class Player():
     def stopAtPointsAfterMove(self) -> None:
         global stopAfterMove
         self.stopPonits : list = []
-        if nb_wagons == 3: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg3
-        elif nb_wagons == 4: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg4
+        if int(nb_wagons) == 3: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg3
+        elif int(nb_wagons) == 4: self.stopPonits.clear(); self.stopPonits += stopPointActions_wg4
         if stopAfterMove:
             if playerPosX in self.stopPonits:
                 self.playerStop()
@@ -1349,40 +1351,65 @@ class Player():
 
 
 
-class Clouds():
-    def __init__(self,parent,canvas):
+class ArrowAttack():
+    def __init__(self, parent, ar_x:int, ar_y:int, canvas:Canvas, dirct:int) -> None:
         self.parent = parent
-        self.canvas = canvas
-        self.fallSpeed = randint(35, 55)
-        self.yPosition = randint(140, 260)        
-        self.xPosition = randint(1200, 1300)
-        self.isgood = randint(0, 1)
-        self.vitesse = randint(-25,-10)
-        self.goodItems = [path_cloud_bg, path_cloud_2_bg, path_cloud_3_bg]
+        self.canvas : Canvas = canvas
+        self.ar_x : int = ar_x
+        self.ar_y : int = ar_y
+        self.dirct : int = dirct
+        self.itemPhoto = ImageTk.PhotoImage(Image.open(str(path_arrow_bullet)).resize((40, 20), Image.ANTIALIAS))
+        self.arrowImg = self.canvas.create_image(self.ar_x, self.ar_y, image=self.itemPhoto)
+        self.flyingArrow()
+
+    def flyingArrow(self) -> None:
+        self.doors : list = []
+        if int(nb_wagons) == 3: self.doors.clear(); self.doors += door_pos_3_wagon
+        elif int(nb_wagons) == 4: self.doors.clear(); self.doors += door_pos_4_wagon
+        if not pauseGame: 
+            if int(self.dirct) == 1:
+                self.ar_x += 2
+                self.canvas.move(self.arrowImg, self.ar_x, self.ar_y)
+            else:
+                self.ar_x -= 2
+                self.canvas.move(self.arrowImg, self.ar_x, self.ar_y)
+        if (int(self.canvas.coords(self.arrowImg)[0]) in self.doors):
+            self.canvas.delete(self.arrowImg)
+        else: self.parent.after(50, self.flyingArrow)
+
+
+class Clouds():
+    def __init__(self, parent, canvas:Canvas) -> None:
+        self.parent = parent
+        self.canvas : Canvas = canvas
+        self.fallSpeed : int = randint(35, 55)
+        self.yPosition : int = randint(140, 260)        
+        self.xPosition : int = randint(1200, 1300)
+        self.isgood : int = randint(0, 1)
+        self.vitesse : int = randint(-25,-10)
+        self.goodItems : list = [path_cloud_bg, path_cloud_2_bg, path_cloud_3_bg]
         # create falling items
-        self.itemPhoto = ImageTk.PhotoImage(Image.open(f"{choice(self.goodItems)}").resize((randint(130, 150), randint(84, 92))))
-        self.fallItem = self.canvas.create_image( (self.xPosition ,self.yPosition),
-            image=self.itemPhoto , tag="good")
+        self.itemPhoto = ImageTk.PhotoImage(Image.open(f"{choice(self.goodItems)}").resize((randint(130, 150), randint(84, 92)), Image.ANTIALIAS))
+        self.fallItem = self.canvas.create_image( (self.xPosition, self.yPosition),
+            image=self.itemPhoto, tag="good")
         # trigger falling item movement
         self.movingClouds()
         
-    def movingClouds(self):
+    def movingClouds(self) -> None:
         if not pauseGame: self.canvas.move(self.fallItem, self.vitesse, 0)
-        if (self.canvas.coords(self.fallItem)[0] < randint(-100, 200)):
-            self.canvas.delete(self.fallItem)
-        else:
-            self.parent.after(self.fallSpeed, self.movingClouds)
+        if (int(self.canvas.coords(self.fallItem)[0]) < int(randint(-100, 200))): self.canvas.delete(self.fallItem)
+        else: self.parent.after(int(self.fallSpeed), self.movingClouds)
 
 
 ## Sounds
 def trainSound() -> None:
     train_sound.play(-1)
-    train_sound.set_volume(volume_sound)
+    train_sound.set_volume(float(volume_sound))
 def stopTrainSound() -> None:
     train_sound.stop()
 def creditMusic() -> None:
     credit_music.play(-1)
-    credit_music.set_volume(volume_sound / 2.0)
+    credit_music.set_volume(float(volume_sound) / 2.0)
 def stopCreditMusic() -> None:
     credit_music.stop()
 def clickSound() -> None:
@@ -1394,14 +1421,14 @@ def clickSound() -> None:
 def startMenuGame() -> None:
     startMenu = Window()
     startMenu.title('Colt Express')
-    startMenu.iconphoto(False, PhotoImage(file= path_sack_icon))
+    startMenu.iconphoto(False, PhotoImage(file=str(path_sack_icon)))
     startMenu.wm_attributes("-topmost", 1)
     startMenu.bind('<Escape>', lambda event: startMenu.quit())
     startMenu.mainloop()
 
 
 #### edit images
-def rotate_img(img_path, rt_degr) -> None:
+def rotate_img(img_path:str, rt_degr:int) -> None:
     img = Image.open(img_path)
     return img.rotate(rt_degr, expand=1)
 

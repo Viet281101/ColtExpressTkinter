@@ -134,6 +134,7 @@ path_blue_gem : str = "./assets/Images/Items/blue_diamond.png"
 path_green_gem : str = "./assets/Images/Items/green_diamond.png"
 path_red_gem : str = "./assets/Images/Items/red_diamond.png"
 path_sack_icon : str = "./assets/Images/Items/sack.png"
+path_arrow_bullet : str = "./assets/Images/Items/arrow.png"
 path_train_car : str = './assets/Images/Train/TrainBack.png'
 path_start_menu_bg : str = './assets/Images/Background/pixel_train_city.gif'
 path_background_city : str = "./assets/Images/Background/BackgroundCity.png"
@@ -179,6 +180,7 @@ english_text : dict = {
     'exit' : "Exit",
     'quit' : "Quit",
     'return' : "Return",
+    'lang_not_title': "Language Notification",
     'lang_not' : "Press 'Apply' to load the language !",
     'confirm_quit' : "Are you sure to quit the game ? \nYour data will not be saved !",
     'caracter_move_lr' : "Move one car forward or backward, staying on the same floor.",
@@ -206,6 +208,7 @@ francais_texte : dict = {
     'exit' : "Sortir",
     'quit' : "Quitté",
     'return' : "Retourne",
+    'lang_not_title': "Langue Notification",
     'lang_not' : "Appuyez sur 'Appliquer' pour charger la langue !",
     'confirm_quit' : "Etes-vous sûr de quitter le jeu ? \nVos données ne seront pas enregistrées !",
     'caracter_move_lr' : "Se déplacer d'un wagon en avant ou en arrière, en restant au même étage.",
@@ -233,6 +236,7 @@ vietnamese_text : dict = {
     'exit' : "Thoát",
     'quit' : "Thoát",
     'return' : "Trở về",
+    'lang_not_title': "Thông báo ngôn ngữ",
     'lang_not' : "Nhấn 'Áp dụng' để tải ngôn ngữ !",
     'confirm_quit' : "Bạn có chắc chắn thoát khỏi trò chơi? \nDữ liệu của bạn sẽ không được lưu !",
     'caracter_move_lr' : "Di chuyển một toa tàu về phía trước hoặc phía sau, hoặc ở trên cùng một tầng.",
@@ -245,7 +249,7 @@ vietnamese_text : dict = {
 
 
 ############################################ GAME RULE: ###################################################
-game_rule_EN = '''
+game_rule_EN : str = '''
 
 
         Overview of game rules:
@@ -281,7 +285,7 @@ game_rule_EN = '''
 
 '''
 
-game_rule_FR = '''
+game_rule_FR : str = '''
 
 
         Aperçu des règles du jeu :
@@ -318,7 +322,7 @@ game_rule_FR = '''
 '''
 
 
-game_rule_VN = '''
+game_rule_VN : str = '''
 
 
         Tổng quan luật chơi:
@@ -357,7 +361,7 @@ game_rule_VN = '''
 
 
 ####################################### CREDIT TEXT ############################################################
-credits_text_eng = '''
+credits_text_eng : str = '''
 ---------------------- CREDIT ----------------------
 
             
@@ -431,7 +435,7 @@ credits_text_eng = '''
 '''
 
 
-credits_text_fr = '''
+credits_text_fr : str = '''
 ---------------------- LE CRÉDIT ----------------------
 
             
@@ -506,7 +510,7 @@ credits_text_fr = '''
 '''
 
 
-credits_text_vn = '''
+credits_text_vn : str = '''
 ---------------------- CREDIT ----------------------
 
             
